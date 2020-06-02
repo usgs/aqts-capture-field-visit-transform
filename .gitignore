@@ -1,0 +1,9 @@
+/.idea/
+/aqts-capture-field-visit-transform.iml
+/application.yml
+/.flattened-pom.xml
+/target/
+/.settings/
+/.classpath
+/.project
+/.attach_pid*
