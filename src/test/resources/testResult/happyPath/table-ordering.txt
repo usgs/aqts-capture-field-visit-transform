@@ -1,1 +1,1 @@
-discrete_ground_water_aqts
+discrete_ground_water

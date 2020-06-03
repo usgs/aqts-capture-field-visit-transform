@@ -14,8 +14,9 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 	private FieldVisitDao fieldVisitDao;
 
 	public static final String FIELD_VISIT_DATA = "fieldVisitData";
-	public static final String BAD_INPUT = "badInput";
+	public static final String BAD_INPUT = "bad input";
 	public static final String SUCCESS = "success";
+	public static final String NO_RECORDS_FOUND = "no records found";
 
 	@Autowired
 	public TransformFieldVisit(FieldVisitDao fieldVisitDao) {
@@ -26,10 +27,10 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 	public ResultObject apply(RequestObject request) {
 		ResultObject result = processRequest(request);
 		String transformStatus = result.getTransformStatus();
-		if (SUCCESS != transformStatus) {
-			throw new RuntimeException(transformStatus);
-		} else {
+		if (SUCCESS.equals(transformStatus)) {
 			return result;
+		} else {
+			throw new RuntimeException(transformStatus);
 		}
 	}
 
@@ -41,23 +42,29 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 			} else {
 				// It's possible one could route the wrong type to this lambda via the state machine.
 				LOG.debug("request type was not a field visit");
-				return badInput(request);
+				return badInput();
 			}
 		} else {
 			LOG.debug("request or type was null");
-			return badInput(request);
+			return badInput();
 		}
 	}
 
 	protected ResultObject processFieldVisit(RequestObject request) {
 		ResultObject result = new ResultObject();
 		Integer recordsInserted = fieldVisitDao.doInsertDiscreteGroundWaterData(request.getId());
+		if (recordsInserted > 0) {
+			result.setTransformStatus(SUCCESS);
+		} else {
+			// the query did not yield new records, nor did it throw a duplicate key exception
+			result.setTransformStatus(NO_RECORDS_FOUND);
+			LOG.debug("No records found");
+		}
 		result.setRecordsInserted(recordsInserted);
-		result.setTransformStatus(SUCCESS);
 		return result;
 	}
 
-	protected ResultObject badInput(RequestObject request) {
+	protected ResultObject badInput() {
 		ResultObject result = new ResultObject();
 		result.setTransformStatus(BAD_INPUT);
 		return result;

@@ -1,4 +1,4 @@
-insert into discrete_ground_water_aqts (
+insert into discrete_ground_water (
 	field_visit_identifier
 	,location_identifier
 	,start_time
