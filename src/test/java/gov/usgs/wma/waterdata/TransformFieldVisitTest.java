@@ -34,7 +34,7 @@ public class TransformFieldVisitTest {
 	public void processRequestInvalidRequestNullRequestTest() {
 		ResultObject result = transformFieldVisit.processRequest(null);
 		assertNotNull(result);
-		assertEquals(TransformFieldVisit.BAD_INPUT, result.getTransformStatus());
+		assertEquals(TransformFieldVisit.REQUEST_OR_TYPE_NULL, result.getTransformStatus());
 
 		assertThrows(RuntimeException.class, () -> {
 			transformFieldVisit.apply(request);
@@ -46,7 +46,7 @@ public class TransformFieldVisitTest {
 		request.setType(null);
 		ResultObject result = transformFieldVisit.processRequest(request);
 		assertNotNull(result);
-		assertEquals(TransformFieldVisit.BAD_INPUT, result.getTransformStatus());
+		assertEquals(TransformFieldVisit.REQUEST_OR_TYPE_NULL, result.getTransformStatus());
 
 		assertThrows(RuntimeException.class, () -> {
 			transformFieldVisit.apply(request);
@@ -58,7 +58,7 @@ public class TransformFieldVisitTest {
 		request.setType(NOT_A_VALID_TYPE);
 		ResultObject result = transformFieldVisit.processRequest(request);
 		assertNotNull(result);
-		assertEquals(TransformFieldVisit.BAD_INPUT, result.getTransformStatus());
+		assertEquals(TransformFieldVisit.REQUEST_TYPE_NOT_A_FIELD_VISIT, result.getTransformStatus());
 
 		assertThrows(RuntimeException.class, () -> {
 			transformFieldVisit.apply(request);

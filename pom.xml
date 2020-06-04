@@ -8,12 +8,6 @@
     <properties>
         <java.version>11</java.version>
         <revision>0-DEFAULT</revision>
-        <aws-lambda-events.version>2.2.7</aws-lambda-events.version>
-        <aws-lambda-java-core.version>1.2.0</aws-lambda-java-core.version>
-        <spring-cloud-function.version>3.0.3.RELEASE</spring-cloud-function.version>
-        <spring-boot-thin.version>1.0.23.RELEASE</spring-boot-thin.version>
-        <mybatis-spring-version>2.0.3</mybatis-spring-version>
-        <mybatis-version>3.5.3</mybatis-version>
     </properties>
 
     <licenses>
@@ -59,18 +53,18 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-function-adapter-aws</artifactId>
-            <version>${spring-cloud-function.version}</version>
+            <version>3.0.3.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-events</artifactId>
-            <version>${aws-lambda-events.version}</version>
+            <version>2.2.7</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-core</artifactId>
-            <version>${aws-lambda-java-core.version}</version>
+            <version>1.2.0</version>
             <scope>provided</scope>
         </dependency>
 
@@ -146,7 +140,7 @@
                     <dependency>
                         <groupId>org.springframework.boot.experimental</groupId>
                         <artifactId>spring-boot-thin-layout</artifactId>
-                        <version>${spring-boot-thin.version}</version>
+                        <version>1.0.23.RELEASE</version>
                     </dependency>
                 </dependencies>
             </plugin>

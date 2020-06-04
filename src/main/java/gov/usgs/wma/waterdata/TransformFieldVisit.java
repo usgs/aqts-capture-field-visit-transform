@@ -14,9 +14,10 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 	private FieldVisitDao fieldVisitDao;
 
 	public static final String FIELD_VISIT_DATA = "fieldVisitData";
-	public static final String BAD_INPUT = "bad input";
 	public static final String SUCCESS = "success";
 	public static final String NO_RECORDS_FOUND = "no records found";
+	public static final String REQUEST_TYPE_NOT_A_FIELD_VISIT = "request type was not a field visit";
+	public static final String REQUEST_OR_TYPE_NULL = "request or type was null";
 
 	@Autowired
 	public TransformFieldVisit(FieldVisitDao fieldVisitDao) {
@@ -37,16 +38,20 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 	protected ResultObject processRequest(RequestObject request) {
 		if (null != request && null != request.getType()) {
 			LOG.debug("id {}, type {}", request.getId(), request.getType());
-			if (FIELD_VISIT_DATA.equals(request.getType())) {
-				return processFieldVisit(request);
-			} else {
-				// It's possible one could route the wrong type to this lambda via the state machine.
-				LOG.debug("request type was not a field visit");
-				return badInput();
-			}
+			return processRequestType(request);
 		} else {
-			LOG.debug("request or type was null");
-			return badInput();
+			LOG.debug(REQUEST_OR_TYPE_NULL);
+			return badInput(REQUEST_OR_TYPE_NULL);
+		}
+	}
+
+	protected ResultObject processRequestType(RequestObject request) {
+		if (FIELD_VISIT_DATA.equals(request.getType())) {
+			return processFieldVisit(request);
+		} else {
+			// It's possible one could route the wrong type to this lambda via the state machine.
+			LOG.debug(REQUEST_TYPE_NOT_A_FIELD_VISIT);
+			return badInput(REQUEST_TYPE_NOT_A_FIELD_VISIT);
 		}
 	}
 
@@ -58,15 +63,15 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 		} else {
 			// the query did not yield new records, nor did it throw a duplicate key exception
 			result.setTransformStatus(NO_RECORDS_FOUND);
-			LOG.debug("No records found");
+			LOG.debug(NO_RECORDS_FOUND);
 		}
 		result.setRecordsInserted(recordsInserted);
 		return result;
 	}
 
-	protected ResultObject badInput() {
+	protected ResultObject badInput(String errorReason) {
 		ResultObject result = new ResultObject();
-		result.setTransformStatus(BAD_INPUT);
+		result.setTransformStatus(errorReason);
 		return result;
 	}
 
