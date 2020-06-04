@@ -36,23 +36,27 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 	}
 
 	protected ResultObject processRequest(RequestObject request) {
+		ResultObject result = null;
 		if (null != request && null != request.getType()) {
 			LOG.debug("id {}, type {}", request.getId(), request.getType());
-			return processRequestType(request);
+			result = processRequestType(request);
 		} else {
 			LOG.debug(REQUEST_OR_TYPE_NULL);
-			return badInput(REQUEST_OR_TYPE_NULL);
+			result = badInput(REQUEST_OR_TYPE_NULL);
 		}
+		return result;
 	}
 
 	protected ResultObject processRequestType(RequestObject request) {
+		ResultObject result = null;
 		if (FIELD_VISIT_DATA.equalsIgnoreCase(request.getType())) {
-			return processFieldVisit(request);
+			result = processFieldVisit(request);
 		} else {
 			// It's possible one could route the wrong type to this lambda via the state machine.
 			LOG.debug(REQUEST_TYPE_NOT_A_FIELD_VISIT);
-			return badInput(REQUEST_TYPE_NOT_A_FIELD_VISIT);
+			result = badInput(REQUEST_TYPE_NOT_A_FIELD_VISIT);
 		}
+		return result;
 	}
 
 	protected ResultObject processFieldVisit(RequestObject request) {
