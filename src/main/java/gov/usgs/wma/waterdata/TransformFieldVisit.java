@@ -46,7 +46,7 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 	}
 
 	protected ResultObject processRequestType(RequestObject request) {
-		if (FIELD_VISIT_DATA.equals(request.getType())) {
+		if (FIELD_VISIT_DATA.equalsIgnoreCase(request.getType())) {
 			return processFieldVisit(request);
 		} else {
 			// It's possible one could route the wrong type to this lambda via the state machine.
