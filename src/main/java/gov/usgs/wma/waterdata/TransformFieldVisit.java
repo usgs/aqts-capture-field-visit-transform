@@ -61,15 +61,15 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 
 	protected ResultObject processFieldVisit(RequestObject request) {
 		ResultObject result = new ResultObject();
-		Integer recordsInserted = fieldVisitDao.doInsertDiscreteGroundWaterData(request.getId());
-		if (recordsInserted > 0) {
+		Integer recordsInsertedOrUpdated = fieldVisitDao.doUpsertDiscreteGroundWaterData(request.getId());
+		if (recordsInsertedOrUpdated > 0) {
 			result.setTransformStatus(SUCCESS);
 		} else {
 			// the query did not yield new records, nor did it throw a duplicate key exception
 			result.setTransformStatus(NO_RECORDS_FOUND);
 			LOG.debug(NO_RECORDS_FOUND);
 		}
-		result.setRecordsInserted(recordsInserted);
+		result.setRecordsInsertedOrUpdated(recordsInsertedOrUpdated);
 		return result;
 	}
 

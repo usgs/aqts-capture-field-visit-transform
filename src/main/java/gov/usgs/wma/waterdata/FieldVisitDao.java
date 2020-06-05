@@ -19,12 +19,12 @@ public class FieldVisitDao {
 	@Autowired
 	protected JdbcTemplate jdbcTemplate;
 
-	@Value("classpath:sql/insertDiscreteGroundWaterData.sql")
-	private Resource insertDiscreteGroundWaterData;
+	@Value("classpath:sql/upsertDiscreteGroundWaterData.sql")
+	private Resource upsertDiscreteGroundWaterData;
 
 	@Transactional
-	public int doInsertDiscreteGroundWaterData(Long jsonDataId) {
-		return jdbcTemplate.update(getSql(insertDiscreteGroundWaterData), jsonDataId);
+	public int doUpsertDiscreteGroundWaterData(Long jsonDataId) {
+		return jdbcTemplate.update(getSql(upsertDiscreteGroundWaterData), jsonDataId);
 	}
 
 	protected String getSql(Resource resource) {
