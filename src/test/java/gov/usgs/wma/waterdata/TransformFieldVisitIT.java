@@ -2,7 +2,6 @@ package gov.usgs.wma.waterdata;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.context.annotation.Import;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
@@ -46,7 +44,7 @@ public class TransformFieldVisitIT {
 	private TransformFieldVisit transformFieldVisit;
 	private RequestObject request;
 
-	public static final Integer DISCRETE_GROUND_WATER_ROWS_INSERTED = 27;
+	public static final Integer DISCRETE_GROUND_WATER_ROWS_INSERTED = 9;
 	public static final Integer DISCRETE_GROUND_WATER_NO_ROWS_INSERTED = 0;
 	public static final Long JSON_DATA_ID_1 = 1L;
 	public static final Long JSON_DATA_ID_2 = 2L;
@@ -68,10 +66,8 @@ public class TransformFieldVisitIT {
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
 		assertEquals(DISCRETE_GROUND_WATER_ROWS_INSERTED, result.getRecordsInserted());
 
-		// Inserting the same data twice should fail
-		assertThrows(DuplicateKeyException.class, () -> {
-			transformFieldVisit.processFieldVisit(request);
-		}, "should have thrown a duplicate key exception but did not");
+		// Processing the same data twice should not throw an exception, the old rows will be replaced.
+		transformFieldVisit.processFieldVisit(request);
 	}
 
 	@DatabaseSetup("classpath:/testData/")

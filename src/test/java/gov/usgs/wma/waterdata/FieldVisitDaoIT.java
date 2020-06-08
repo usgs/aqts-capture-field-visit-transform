@@ -25,9 +25,9 @@ import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment=WebEnvironment.NONE,
 		classes={DBTestConfig.class, FieldVisitDao.class})
@@ -51,15 +51,15 @@ public class FieldVisitDaoIT {
 	@ExpectedDatabase(value="classpath:/testResult/happyPath/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	@Test
 	public void doInsertDiscreteGroundWaterDataTest() {
+		fieldVisitDao.doDeleteDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1);
 		assertEquals(
 				TransformFieldVisitIT.DISCRETE_GROUND_WATER_ROWS_INSERTED,
 				fieldVisitDao.doInsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1));
 
-		// Inserting the same data twice should fail
+		// Inserting the same data twice without deleting it first throws a duplicate key exception on the constraint
 		assertThrows(DuplicateKeyException.class, () -> {
 			fieldVisitDao.doInsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1);
 		}, "should have thrown a duplicate key exception but did not");
-
 	}
 
 	@DatabaseSetup("classpath:/testData/")

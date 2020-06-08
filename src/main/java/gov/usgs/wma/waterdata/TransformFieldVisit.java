@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class TransformFieldVisit implements Function<RequestObject, ResultObject> {
@@ -61,7 +62,7 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 
 	protected ResultObject processFieldVisit(RequestObject request) {
 		ResultObject result = new ResultObject();
-		Integer recordsInserted = fieldVisitDao.doInsertDiscreteGroundWaterData(request.getId());
+		Integer recordsInserted = loadDiscreteGroundWaterIntoTransformDb(request);
 		if (recordsInserted > 0) {
 			result.setTransformStatus(SUCCESS);
 		} else {
@@ -73,11 +74,17 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 		return result;
 	}
 
+	@Transactional
+	protected Integer loadDiscreteGroundWaterIntoTransformDb (RequestObject request) {
+		Integer recordsInserted = 0;
+		fieldVisitDao.doDeleteDiscreteGroundWaterData(request.getId());
+		recordsInserted = fieldVisitDao.doInsertDiscreteGroundWaterData(request.getId());
+		return recordsInserted;
+	}
+
 	protected ResultObject badInput(String errorReason) {
 		ResultObject result = new ResultObject();
 		result.setTransformStatus(errorReason);
 		return result;
 	}
-
 }
-

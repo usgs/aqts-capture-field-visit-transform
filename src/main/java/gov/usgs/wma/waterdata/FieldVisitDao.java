@@ -22,9 +22,17 @@ public class FieldVisitDao {
 	@Value("classpath:sql/insertDiscreteGroundWaterData.sql")
 	private Resource insertDiscreteGroundWaterData;
 
+	@Value("classpath:sql/deleteDiscreteGroundWaterData.sql")
+	private Resource deleteDiscreteGroundWaterData;
+
 	@Transactional
 	public int doInsertDiscreteGroundWaterData(Long jsonDataId) {
 		return jdbcTemplate.update(getSql(insertDiscreteGroundWaterData), jsonDataId);
+	}
+
+	@Transactional
+	public int doDeleteDiscreteGroundWaterData(Long jsonDataId) {
+		return jdbcTemplate.update(getSql(deleteDiscreteGroundWaterData), jsonDataId);
 	}
 
 	protected String getSql(Resource resource) {

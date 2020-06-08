@@ -29,7 +29,7 @@ insert into discrete_ground_water (
 	,ground_water_measurement
 )
 select
-	field_visit_identifier
+	field_visit_header_info.field_visit_identifier
 	,location_identifier
 	,start_time
 	,end_time
@@ -61,4 +61,5 @@ select
 from field_visit_header_info
 		 join field_visit_readings
 			  on field_visit_header_info.json_data_id = field_visit_readings.json_data_id
+			  and field_visit_header_info.field_visit_identifier = field_visit_readings.field_visit_identifier
 where field_visit_header_info.json_data_id = ?
