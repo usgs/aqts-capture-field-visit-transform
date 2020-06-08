@@ -59,7 +59,7 @@ resources:
         Dimensions:
           - Name: FunctionName
             Value:
-              Ref: TransformFieldVisitLambdaFunction
+              Ref: TransformLambdaFunction
         MetricName: ConcurrentExecutions
         Statistic: Maximum
         ComparisonOperator: GreaterThanOrEqualToThreshold
@@ -77,7 +77,7 @@ resources:
         Dimensions:
           - Name: FunctionName
             Value:
-              Ref: TransformFieldVisitLambdaFunction
+              Ref: TransformLambdaFunction
         MetricName: Errors
         Statistic: Sum
         ComparisonOperator: GreaterThanOrEqualToThreshold
