@@ -28,11 +28,11 @@ custom:
     connectInfo: ${ssm:/aws/reference/secretsmanager/NWCAPTURE-DB-${self:provider.stage}~true}
 
 functions:
-  transformFieldVisit:
+  transform:
     handler: gov.usgs.wma.waterdata.TransformFieldVisitHandler
     role: arn:aws:iam::${self:custom.accountNumber}:role/csr-Lambda-Role
     environment:
-      FUNCTION_NAME: transformFieldVisit
+      FUNCTION_NAME: transform
       AQTS_DATABASE_ADDRESS: ${self:custom.db.connectInfo.DATABASE_ADDRESS}
       AQTS_DATABASE_PORT: ${self:custom.db.connectInfo.DATABASE_PORT}
       AQTS_SCHEMA_NAME: ${self:custom.db.connectInfo.SCHEMA_NAME}
