@@ -2,17 +2,17 @@ package gov.usgs.wma.waterdata;
 
 public class ResultObject {
 	private String transformStatus;
-	private Integer recordsInsertedOrUpdated;
+	private Integer recordsInserted;
 	public String getTransformStatus() {
 		return transformStatus;
 	}
 	public void setTransformStatus(String transformStatus) {
 		this.transformStatus = transformStatus;
 	}
-	public Integer getRecordsInsertedOrUpdated() {
-		return recordsInsertedOrUpdated;
+	public Integer getRecordsInserted() {
+		return recordsInserted;
 	}
-	public void setRecordsInsertedOrUpdated(Integer recordsInsertedOrUpdated) {
-		this.recordsInsertedOrUpdated = recordsInsertedOrUpdated;
+	public void setRecordsInserted(Integer recordsInserted) {
+		this.recordsInserted = recordsInserted;
 	}
 }

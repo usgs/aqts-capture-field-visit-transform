@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.FileUrlResource;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
@@ -26,6 +27,7 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment=WebEnvironment.NONE,
 		classes={DBTestConfig.class, FieldVisitDao.class})
@@ -44,37 +46,30 @@ public class FieldVisitDaoIT {
 	@Autowired
 	private FieldVisitDao fieldVisitDao;
 
-	@DatabaseSetup("classpath:/testData/staticData/")
+	@DatabaseSetup("classpath:/testData/")
 	@DatabaseSetup("classpath:/testResult/cleanseOutput/")
 	@ExpectedDatabase(value="classpath:/testResult/happyPath/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	@Test
-	public void doUpsertDiscreteGroundWaterDataTest() {
+	public void doInsertDiscreteGroundWaterDataTest() {
+		fieldVisitDao.doDeleteDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1);
 		assertEquals(
 				TransformFieldVisitIT.DISCRETE_GROUND_WATER_ROWS_INSERTED,
-				fieldVisitDao.doUpsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1));
+				fieldVisitDao.doInsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1));
 
-		// Upserting the same data twice should not throw an exception, but the data will not be upserted
-		// unless the last_modified date is more current than what we already have in the destination table
-		fieldVisitDao.doUpsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1);
+		// Inserting the same data twice without deleting it first throws a duplicate key exception on the constraint
+		assertThrows(DuplicateKeyException.class, () -> {
+			fieldVisitDao.doInsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1);
+		}, "should have thrown a duplicate key exception but did not");
 	}
 
-	@DatabaseSetup("classpath:/testData/dataToBeUpdated/")
-	@ExpectedDatabase(value="classpath:/testResult/happyPath/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
-	@Test
-	public void doUpsertDiscreteGroundWaterDataWithUpdatesTest() {
-		assertEquals(
-				TransformFieldVisitIT.DISCRETE_GROUND_WATER_ROWS_UPSERTED,
-				fieldVisitDao.doUpsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1));
-	}
-
-	@DatabaseSetup("classpath:/testData/staticData/")
+	@DatabaseSetup("classpath:/testData/")
 	@DatabaseSetup("classpath:/testResult/cleanseOutput/")
 	@ExpectedDatabase(value="classpath:/testResult/cleanseOutput/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	@Test
 	public void notFoundTest() {
 		assertEquals(
 				TransformFieldVisitIT.DISCRETE_GROUND_WATER_NO_ROWS_INSERTED,
-				fieldVisitDao.doUpsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_2));
+				fieldVisitDao.doInsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_2));
 	}
 
 	@Test
