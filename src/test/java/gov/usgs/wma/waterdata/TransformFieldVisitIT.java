@@ -44,7 +44,7 @@ public class TransformFieldVisitIT {
 	private TransformFieldVisit transformFieldVisit;
 	private RequestObject request;
 
-	public static final Integer DISCRETE_GROUND_WATER_ROWS_INSERTED = 9;
+	public static final Integer DISCRETE_GROUND_WATER_ROWS_INSERTED = 3;
 	public static final Integer DISCRETE_GROUND_WATER_NO_ROWS_INSERTED = 0;
 	public static final Long JSON_DATA_ID_1 = 1L;
 	public static final Long JSON_DATA_ID_2 = 2L;
