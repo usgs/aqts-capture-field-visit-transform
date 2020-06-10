@@ -61,7 +61,6 @@ public class FieldVisitDaoIT {
 		}, "should have thrown a duplicate key exception but did not");
 	}
 
-	@DatabaseSetup("classpath:/testData/")
 	@DatabaseSetup("classpath:/testResult/happyPath/")
 	@ExpectedDatabase(value="classpath:/testResult/cleanseOutput/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	@Test

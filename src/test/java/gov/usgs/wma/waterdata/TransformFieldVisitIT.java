@@ -59,7 +59,7 @@ public class TransformFieldVisitIT {
 	@DatabaseSetup("classpath:/testResult/cleanseOutput/")
 	@ExpectedDatabase(value="classpath:/testResult/happyPath/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	@Test
-	public void processFieldVisitDataTest() {
+	public void processFieldVisitDataNewDataTest() {
 		request.setId(JSON_DATA_ID_1);
 		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
@@ -70,6 +70,19 @@ public class TransformFieldVisitIT {
 		// Processing the same data twice should not throw an exception
 		// the old rows will be replaced, this is a delete + add
 		transformFieldVisit.processFieldVisit(request);
+	}
+
+	@DatabaseSetup("classpath:/testData/")
+	@DatabaseSetup("classpath:/testResult/happyPath/")
+	@ExpectedDatabase(value="classpath:/testResult/happyPath/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	@Test
+	public void processFieldVisitDataOldDataToBeReplacedTest() {
+		request.setId(JSON_DATA_ID_1);
+		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
+		ResultObject result = transformFieldVisit.processFieldVisit(request);
+		assertNotNull(result);
+		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
+		assertEquals(DISCRETE_GROUND_WATER_ROWS_INSERTED, result.getRecordsInserted());
 	}
 
 	@DatabaseSetup("classpath:/testData/")
