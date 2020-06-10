@@ -51,7 +51,6 @@ public class FieldVisitDaoIT {
 	@ExpectedDatabase(value="classpath:/testResult/happyPath/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	@Test
 	public void doInsertDiscreteGroundWaterDataTest() {
-		fieldVisitDao.doDeleteDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1);
 		assertEquals(
 				TransformFieldVisitIT.DISCRETE_GROUND_WATER_ROWS_INSERTED,
 				fieldVisitDao.doInsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1));
@@ -60,6 +59,14 @@ public class FieldVisitDaoIT {
 		assertThrows(DuplicateKeyException.class, () -> {
 			fieldVisitDao.doInsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1);
 		}, "should have thrown a duplicate key exception but did not");
+	}
+
+	@DatabaseSetup("classpath:/testData/")
+	@DatabaseSetup("classpath:/testResult/happyPath/")
+	@ExpectedDatabase(value="classpath:/testResult/cleanseOutput/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	@Test
+	public void doDeleteDiscreteGroundWaterDataTest() {
+		fieldVisitDao.doDeleteDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1);
 	}
 
 	@DatabaseSetup("classpath:/testData/")

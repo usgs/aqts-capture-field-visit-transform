@@ -10,6 +10,7 @@ insert into discrete_ground_water (
 	,completed_work
 	,last_modified
 	,parameter
+	,parm_cd
 	,monitoring_method
 	,field_visit_value
 	,unit
@@ -40,6 +41,7 @@ select
     ,completed_work
     ,last_modified
     ,field_visit_readings.parameter
+    ,aq_to_nwis_parm.parm_cd
     ,monitoring_method
     ,field_visit_value
     ,unit
@@ -59,14 +61,13 @@ select
     ,ground_water_measurement
 
 from field_visit_header_info
-         left join field_visit_readings
+         join field_visit_readings
               on field_visit_header_info.json_data_id = field_visit_readings.json_data_id
               and field_visit_header_info.field_visit_identifier = field_visit_readings.field_visit_identifier
-         left join aq_to_nwis_parm
+         join aq_to_nwis_parm
               on field_visit_readings.parameter || '|' || field_visit_readings.unit = aq_to_nwis_parm.parameter
-         left join data_type_mapping
+         join data_type_mapping
               on aq_to_nwis_parm.parm_cd = data_type_mapping.parm_cd
               and data_type_mapping.data_type = 'discreteGroundWaterTransform'
 where field_visit_header_info.json_data_id = ?
 and lower(publish) = 'true';
-

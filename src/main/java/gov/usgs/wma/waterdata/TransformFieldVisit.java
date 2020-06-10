@@ -16,7 +16,7 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 
 	public static final String FIELD_VISIT_DATA = "fieldVisitData";
 	public static final String SUCCESS = "success";
-	public static final String NO_RECORDS_FOUND = "no records found";
+	public static final String NO_GROUND_WATER_LEVELS_FOUND = "no ground water levels for this id";
 	public static final String REQUEST_TYPE_NOT_A_FIELD_VISIT = "request type was not a field visit";
 	public static final String REQUEST_OR_TYPE_NULL = "request or type was null";
 
@@ -53,7 +53,7 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 		if (FIELD_VISIT_DATA.equalsIgnoreCase(request.getType())) {
 			result = processFieldVisit(request);
 		} else {
-			// It's possible one could route the wrong type to this lambda via the state machine.
+			// It's possible one could route the wrong type of data to this lambda via the state machine.
 			LOG.debug(REQUEST_TYPE_NOT_A_FIELD_VISIT);
 			result = badInput(REQUEST_TYPE_NOT_A_FIELD_VISIT);
 		}
@@ -66,9 +66,9 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 		if (recordsInserted > 0) {
 			result.setTransformStatus(SUCCESS);
 		} else {
-			// the query did not yield new records, nor did it throw a duplicate key exception
-			result.setTransformStatus(NO_RECORDS_FOUND);
-			LOG.debug(NO_RECORDS_FOUND);
+			// No groundwater levels for this site visit, proceed without error
+			result.setTransformStatus(SUCCESS);
+			LOG.debug(NO_GROUND_WATER_LEVELS_FOUND);
 		}
 		result.setRecordsInserted(recordsInserted);
 		return result;
