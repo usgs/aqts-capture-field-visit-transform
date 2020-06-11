@@ -81,7 +81,7 @@ public class TransformFieldVisitTest {
 		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
 		ResultObject result = transformFieldVisit.processRequest(request);
 		assertNotNull(result);
-		assertEquals(TransformFieldVisit.NO_RECORDS_FOUND, result.getTransformStatus());
+		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
 		verify(fieldVisitDao).doInsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_2);
 	}
 }

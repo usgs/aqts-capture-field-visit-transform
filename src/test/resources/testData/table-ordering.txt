@@ -1,2 +1,4 @@
 field_visit_header_info
 field_visit_readings
+aq_to_nwis_parm
+data_type_mapping

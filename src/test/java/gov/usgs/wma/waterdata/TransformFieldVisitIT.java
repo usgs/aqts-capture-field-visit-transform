@@ -44,10 +44,11 @@ public class TransformFieldVisitIT {
 	private TransformFieldVisit transformFieldVisit;
 	private RequestObject request;
 
-	public static final Integer DISCRETE_GROUND_WATER_ROWS_INSERTED = 9;
+	public static final Integer DISCRETE_GROUND_WATER_ROWS_INSERTED = 3;
 	public static final Integer DISCRETE_GROUND_WATER_NO_ROWS_INSERTED = 0;
 	public static final Long JSON_DATA_ID_1 = 1L;
 	public static final Long JSON_DATA_ID_2 = 2L;
+	public static final Long JSON_DATA_ID_3 = 3L;
 
 	@BeforeEach
 	public void beforeEach() {
@@ -58,7 +59,7 @@ public class TransformFieldVisitIT {
 	@DatabaseSetup("classpath:/testResult/cleanseOutput/")
 	@ExpectedDatabase(value="classpath:/testResult/happyPath/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	@Test
-	public void processFieldVisitDataTest() {
+	public void processFieldVisitDataNewDataTest() {
 		request.setId(JSON_DATA_ID_1);
 		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
@@ -66,8 +67,22 @@ public class TransformFieldVisitIT {
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
 		assertEquals(DISCRETE_GROUND_WATER_ROWS_INSERTED, result.getRecordsInserted());
 
-		// Processing the same data twice should not throw an exception, the old rows will be replaced.
+		// Processing the same data twice should not throw an exception
+		// the old rows will be replaced, this is a delete + add
 		transformFieldVisit.processFieldVisit(request);
+	}
+
+	@DatabaseSetup("classpath:/testData/")
+	@DatabaseSetup("classpath:/testResult/happyPath/")
+	@ExpectedDatabase(value="classpath:/testResult/happyPath/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	@Test
+	public void processFieldVisitDataOldDataToBeReplacedTest() {
+		request.setId(JSON_DATA_ID_1);
+		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
+		ResultObject result = transformFieldVisit.processFieldVisit(request);
+		assertNotNull(result);
+		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
+		assertEquals(DISCRETE_GROUND_WATER_ROWS_INSERTED, result.getRecordsInserted());
 	}
 
 	@DatabaseSetup("classpath:/testData/")
@@ -79,7 +94,20 @@ public class TransformFieldVisitIT {
 		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
-		assertEquals(TransformFieldVisit.NO_RECORDS_FOUND, result.getTransformStatus());
+		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
+		assertEquals(DISCRETE_GROUND_WATER_NO_ROWS_INSERTED, result.getRecordsInserted());
+	}
+
+	@DatabaseSetup("classpath:/testData/")
+	@DatabaseSetup("classpath:/testResult/cleanseOutput/")
+	@ExpectedDatabase(value="classpath:/testResult/cleanseOutput/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	@Test
+	public void noGroundWaterLevelsFoundTest() {
+		request.setId(JSON_DATA_ID_3);
+		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
+		ResultObject result = transformFieldVisit.processFieldVisit(request);
+		assertNotNull(result);
+		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
 		assertEquals(DISCRETE_GROUND_WATER_NO_ROWS_INSERTED, result.getRecordsInserted());
 	}
 }
