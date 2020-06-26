@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Arrays;
+
 @SpringBootTest(webEnvironment=WebEnvironment.NONE)
 public class TransformFieldVisitTest {
 
@@ -27,7 +29,10 @@ public class TransformFieldVisitTest {
 		transformFieldVisit = new TransformFieldVisit(fieldVisitDao);
 		request = new RequestObject();
 		when(fieldVisitDao.doInsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1))
-				.thenReturn(TransformFieldVisitIT.DISCRETE_GROUND_WATER_ROWS_INSERTED);
+				.thenReturn(Arrays.asList(
+						new FieldVisit("46686b86-77c8-4fef-8d72-a994a6a267a5")
+						,new FieldVisit("e251791c-4c7f-4a7c-9480-997f2eeb0b94")
+						,new FieldVisit("8BDA141822744BA5E0530100007FD075")));
 	}
 
 	@Test

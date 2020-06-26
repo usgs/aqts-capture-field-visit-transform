@@ -70,4 +70,5 @@ from field_visit_header_info
               on aq_to_nwis_parm.parm_cd = data_type_mapping.parm_cd
               and data_type_mapping.data_type = 'discreteGroundWaterTransform'
 where field_visit_header_info.json_data_id = ?
-and lower(publish) = 'true';
+and lower(publish) = 'true'
+returning field_visit_identifier;
