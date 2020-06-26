@@ -1,5 +1,6 @@
 package gov.usgs.wma.waterdata;
 
+import java.util.List;
 import java.util.function.Function;
 
 import org.slf4j.Logger;
@@ -62,24 +63,22 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 
 	protected ResultObject processFieldVisit(RequestObject request) {
 		ResultObject result = new ResultObject();
-		Integer recordsInserted = loadDiscreteGroundWaterIntoTransformDb(request);
-		if (recordsInserted > 0) {
+		List<FieldVisit> fieldVisitList = loadDiscreteGroundWaterIntoTransformDb(request);
+		if (fieldVisitList.size() > 0) {
 			result.setTransformStatus(SUCCESS);
 		} else {
 			// No groundwater levels for this site visit, proceed without error
 			result.setTransformStatus(SUCCESS);
 			LOG.debug(NO_GROUND_WATER_LEVELS_FOUND);
 		}
-		result.setRecordsInserted(recordsInserted);
+		result.setFieldVisitList(fieldVisitList);
 		return result;
 	}
 
 	@Transactional
-	protected Integer loadDiscreteGroundWaterIntoTransformDb (RequestObject request) {
-		Integer recordsInserted = 0;
+	protected List<FieldVisit> loadDiscreteGroundWaterIntoTransformDb (RequestObject request) {
 		fieldVisitDao.doDeleteDiscreteGroundWaterData(request.getId());
-		recordsInserted = fieldVisitDao.doInsertDiscreteGroundWaterData(request.getId());
-		return recordsInserted;
+		return fieldVisitDao.doInsertDiscreteGroundWaterData(request.getId());
 	}
 
 	protected ResultObject badInput(String errorReason) {

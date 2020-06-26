@@ -1,5 +1,7 @@
 package gov.usgs.wma.waterdata;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -26,6 +28,8 @@ import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
+import java.util.Arrays;
+
 @SpringBootTest(webEnvironment=WebEnvironment.NONE,
 		classes={DBTestConfig.class, FieldVisitDao.class, TransformFieldVisit.class})
 @ActiveProfiles("it")
@@ -44,8 +48,6 @@ public class TransformFieldVisitIT {
 	private TransformFieldVisit transformFieldVisit;
 	private RequestObject request;
 
-	public static final Integer DISCRETE_GROUND_WATER_ROWS_INSERTED = 3;
-	public static final Integer DISCRETE_GROUND_WATER_NO_ROWS_INSERTED = 0;
 	public static final Long JSON_DATA_ID_1 = 1L;
 	public static final Long JSON_DATA_ID_2 = 2L;
 	public static final Long JSON_DATA_ID_3 = 3L;
@@ -65,7 +67,11 @@ public class TransformFieldVisitIT {
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
-		assertEquals(DISCRETE_GROUND_WATER_ROWS_INSERTED, result.getRecordsInserted());
+		assertThat(result.getFieldVisitList(), containsInAnyOrder(
+				new FieldVisit("46686b86-77c8-4fef-8d72-a994a6a267a5"),
+				new FieldVisit("e251791c-4c7f-4a7c-9480-997f2eeb0b94"),
+				new FieldVisit("8BDA141822744BA5E0530100007FD075")
+		));
 
 		// Processing the same data twice should not throw an exception
 		// the old rows will be replaced, this is a delete + add
@@ -82,7 +88,11 @@ public class TransformFieldVisitIT {
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
-		assertEquals(DISCRETE_GROUND_WATER_ROWS_INSERTED, result.getRecordsInserted());
+		assertThat(result.getFieldVisitList(), containsInAnyOrder(
+				new FieldVisit("46686b86-77c8-4fef-8d72-a994a6a267a5"),
+				new FieldVisit("e251791c-4c7f-4a7c-9480-997f2eeb0b94"),
+				new FieldVisit("8BDA141822744BA5E0530100007FD075")
+		));
 	}
 
 	@DatabaseSetup("classpath:/testData/")
@@ -95,7 +105,7 @@ public class TransformFieldVisitIT {
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
-		assertEquals(DISCRETE_GROUND_WATER_NO_ROWS_INSERTED, result.getRecordsInserted());
+		assertEquals(Arrays.asList(), result.getFieldVisitList());
 	}
 
 	@DatabaseSetup("classpath:/testData/")
@@ -108,6 +118,6 @@ public class TransformFieldVisitIT {
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
-		assertEquals(DISCRETE_GROUND_WATER_NO_ROWS_INSERTED, result.getRecordsInserted());
+		assertEquals(Arrays.asList(), result.getFieldVisitList());
 	}
 }

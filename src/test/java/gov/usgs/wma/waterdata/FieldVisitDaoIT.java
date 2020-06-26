@@ -24,10 +24,15 @@ import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 
 @SpringBootTest(webEnvironment=WebEnvironment.NONE,
 		classes={DBTestConfig.class, FieldVisitDao.class})
@@ -51,9 +56,11 @@ public class FieldVisitDaoIT {
 	@ExpectedDatabase(value="classpath:/testResult/happyPath/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	@Test
 	public void doInsertDiscreteGroundWaterDataTest() {
-		assertEquals(
-				TransformFieldVisitIT.DISCRETE_GROUND_WATER_ROWS_INSERTED,
-				fieldVisitDao.doInsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1));
+		assertThat(fieldVisitDao.doInsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1), containsInAnyOrder(
+				new FieldVisit("46686b86-77c8-4fef-8d72-a994a6a267a5"),
+				new FieldVisit("e251791c-4c7f-4a7c-9480-997f2eeb0b94"),
+				new FieldVisit("8BDA141822744BA5E0530100007FD075")
+		));
 
 		// Inserting the same data twice without deleting it first throws a duplicate key exception on the constraint
 		assertThrows(DuplicateKeyException.class, () -> {
@@ -73,9 +80,7 @@ public class FieldVisitDaoIT {
 	@ExpectedDatabase(value="classpath:/testResult/cleanseOutput/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	@Test
 	public void notFoundTest() {
-		assertEquals(
-				TransformFieldVisitIT.DISCRETE_GROUND_WATER_NO_ROWS_INSERTED,
-				fieldVisitDao.doInsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_2));
+		assertEquals(fieldVisitDao.doInsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_2), Arrays.asList());
 	}
 
 	@Test
