@@ -71,7 +71,7 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 			result.setTransformStatus(SUCCESS);
 			LOG.debug(NO_GROUND_WATER_LEVELS_FOUND);
 		}
-		result.setFieldVisitList(fieldVisitList);
+		result.setFieldVisitIdentifiers(fieldVisitList);
 		return result;
 	}
 

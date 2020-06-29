@@ -67,7 +67,7 @@ public class TransformFieldVisitIT {
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
-		assertThat(result.getFieldVisitList(), containsInAnyOrder(
+		assertThat(result.getFieldVisitIdentifiers(), containsInAnyOrder(
 				new FieldVisit("46686b86-77c8-4fef-8d72-a994a6a267a5"),
 				new FieldVisit("e251791c-4c7f-4a7c-9480-997f2eeb0b94"),
 				new FieldVisit("8BDA141822744BA5E0530100007FD075")
@@ -88,7 +88,7 @@ public class TransformFieldVisitIT {
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
-		assertThat(result.getFieldVisitList(), containsInAnyOrder(
+		assertThat(result.getFieldVisitIdentifiers(), containsInAnyOrder(
 				new FieldVisit("46686b86-77c8-4fef-8d72-a994a6a267a5"),
 				new FieldVisit("e251791c-4c7f-4a7c-9480-997f2eeb0b94"),
 				new FieldVisit("8BDA141822744BA5E0530100007FD075")
@@ -105,7 +105,7 @@ public class TransformFieldVisitIT {
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
-		assertEquals(Arrays.asList(), result.getFieldVisitList());
+		assertEquals(Arrays.asList(), result.getFieldVisitIdentifiers());
 	}
 
 	@DatabaseSetup("classpath:/testData/")
@@ -118,6 +118,6 @@ public class TransformFieldVisitIT {
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
-		assertEquals(Arrays.asList(), result.getFieldVisitList());
+		assertEquals(Arrays.asList(), result.getFieldVisitIdentifiers());
 	}
 }
