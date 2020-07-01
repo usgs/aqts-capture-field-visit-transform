@@ -68,9 +68,9 @@ public class TransformFieldVisitIT {
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
 		assertThat(result.getFieldVisitIdentifiers(), containsInAnyOrder(
-				new FieldVisit("46686b86-77c8-4fef-8d72-a994a6a267a5"),
-				new FieldVisit("e251791c-4c7f-4a7c-9480-997f2eeb0b94"),
-				new FieldVisit("8BDA141822744BA5E0530100007FD075")
+				"46686b86-77c8-4fef-8d72-a994a6a267a5",
+				"e251791c-4c7f-4a7c-9480-997f2eeb0b94",
+				"8BDA141822744BA5E0530100007FD075"
 		));
 
 		// Processing the same data twice should not throw an exception
@@ -89,9 +89,9 @@ public class TransformFieldVisitIT {
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
 		assertThat(result.getFieldVisitIdentifiers(), containsInAnyOrder(
-				new FieldVisit("46686b86-77c8-4fef-8d72-a994a6a267a5"),
-				new FieldVisit("e251791c-4c7f-4a7c-9480-997f2eeb0b94"),
-				new FieldVisit("8BDA141822744BA5E0530100007FD075")
+				"46686b86-77c8-4fef-8d72-a994a6a267a5",
+				"e251791c-4c7f-4a7c-9480-997f2eeb0b94",
+				"8BDA141822744BA5E0530100007FD075"
 		));
 	}
 

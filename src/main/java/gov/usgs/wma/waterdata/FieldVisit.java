@@ -9,6 +9,10 @@ public class FieldVisit {
         this.fieldVisitIdentifier = fieldVisitIdentifier;
     }
 
+    public String getFieldVisitIdentifier() {
+        return fieldVisitIdentifier;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
