@@ -5,12 +5,12 @@ import java.util.List;
 
 public class ResultObject {
 	private String transformStatus;
-	private List<FieldVisit> fieldVisitIdentifiers;
+	private List<String> fieldVisitIdentifiers;
 	
-	public List<FieldVisit> getFieldVisitIdentifiers() {
-		return null != fieldVisitIdentifiers ? fieldVisitIdentifiers : new ArrayList<>();
+	public List<String> getFieldVisitIdentifiers() {
+		return null != fieldVisitIdentifiers ? fieldVisitIdentifiers : new ArrayList<String>();
 	}
-	public void setFieldVisitIdentifiers(List<FieldVisit> fieldVisitIdentifiers) {
+	public void setFieldVisitIdentifiers(List<String> fieldVisitIdentifiers) {
 		this.fieldVisitIdentifiers = fieldVisitIdentifiers;
 	}
 	

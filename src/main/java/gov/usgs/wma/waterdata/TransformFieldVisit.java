@@ -1,5 +1,6 @@
 package gov.usgs.wma.waterdata;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -72,7 +73,11 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 			result.setTransformStatus(SUCCESS);
 			LOG.debug(NO_GROUND_WATER_LEVELS_FOUND);
 		}
-		result.setFieldVisitIdentifiers(fieldVisitList);
+		List<String> identifiers = new ArrayList<>();
+		for (FieldVisit fv : fieldVisitList) {
+			identifiers.add(fv.getFieldVisitIdentifier());
+		}
+		result.setFieldVisitIdentifiers(identifiers);
 		return result;
 	}
 
