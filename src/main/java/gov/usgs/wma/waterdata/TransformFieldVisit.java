@@ -31,6 +31,7 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 		ResultObject result = processRequest(request);
 		String transformStatus = result.getTransformStatus();
 		if (SUCCESS.equalsIgnoreCase(transformStatus)) {
+			LOG.info("the result object: {}", result.getFieldVisitIdentifiers().toString());
 			return result;
 		} else {
 			throw new RuntimeException(transformStatus);
