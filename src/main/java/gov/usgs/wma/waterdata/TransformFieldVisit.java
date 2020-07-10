@@ -84,7 +84,7 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 	@Transactional
 	protected List<FieldVisit> loadDiscreteGroundWaterIntoTransformDb (RequestObject request) {
 		fieldVisitDao.doDeleteDiscreteGroundWaterData(request.getId());
-		return fieldVisitDao.doInsertDiscreteGroundWaterData(request.getId());
+		return fieldVisitDao.doInsertDiscreteGroundWaterData(request);
 	}
 
 	protected ResultObject badInput(String errorReason) {

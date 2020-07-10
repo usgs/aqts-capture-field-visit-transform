@@ -2,7 +2,7 @@
   "name": "aqts-capture-field-visit-transform",
   "description": "Deployment via serverless",
   "dependencies": {
-    "serverless": "^1.71.3",
+    "serverless": "^1.74.1",
     "serverless-plugin-git-variables": "^4.0.0"
   }
 }
