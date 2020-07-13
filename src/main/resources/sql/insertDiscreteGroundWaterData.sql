@@ -71,4 +71,5 @@ from field_visit_header_info
               and data_type_mapping.data_type = 'discreteGroundWaterTransform'
 where field_visit_header_info.json_data_id = ?
 and lower(publish) = 'true'
+and field_visit_header_info.partition_number = ?
 returning field_visit_identifier;

@@ -28,7 +28,9 @@ public class TransformFieldVisitTest {
 	public void beforeEach() {
 		transformFieldVisit = new TransformFieldVisit(fieldVisitDao);
 		request = new RequestObject();
-		when(fieldVisitDao.doInsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1))
+		request.setId(TransformFieldVisitIT.JSON_DATA_ID_1);
+		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
+		when(fieldVisitDao.doInsertDiscreteGroundWaterData(request))
 				.thenReturn(Arrays.asList(
 						new FieldVisit("46686b86-77c8-4fef-8d72-a994a6a267a5")
 						,new FieldVisit("e251791c-4c7f-4a7c-9480-997f2eeb0b94")
@@ -41,6 +43,7 @@ public class TransformFieldVisitTest {
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.REQUEST_OR_TYPE_NULL, result.getTransformStatus());
 
+		request = null;
 		assertThrows(RuntimeException.class, () -> {
 			transformFieldVisit.apply(request);
 		}, "should have thrown an exception but did not");
@@ -72,21 +75,18 @@ public class TransformFieldVisitTest {
 
 	@Test
 	public void processFieldVisitTest() {
-		request.setId(TransformFieldVisitIT.JSON_DATA_ID_1);
-		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
 		ResultObject result = transformFieldVisit.processRequest(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
-		verify(fieldVisitDao).doInsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1);
+		verify(fieldVisitDao).doInsertDiscreteGroundWaterData(request);
 	}
 
 	@Test
 	public void notFoundTest() {
 		request.setId(TransformFieldVisitIT.JSON_DATA_ID_2);
-		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
 		ResultObject result = transformFieldVisit.processRequest(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
-		verify(fieldVisitDao).doInsertDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_2);
+		verify(fieldVisitDao).doInsertDiscreteGroundWaterData(request);
 	}
 }

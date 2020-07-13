@@ -51,10 +51,14 @@ public class TransformFieldVisitIT {
 	public static final Long JSON_DATA_ID_1 = 1L;
 	public static final Long JSON_DATA_ID_2 = 2L;
 	public static final Long JSON_DATA_ID_3 = 3L;
+	public static final Integer PARTITION_NUMBER = 7;
 
 	@BeforeEach
 	public void beforeEach() {
 		request = new RequestObject();
+		request.setId(JSON_DATA_ID_1);
+		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
+		request.setPartitionNumber(TransformFieldVisitIT.PARTITION_NUMBER);
 	}
 
 	@DatabaseSetup("classpath:/testData/")
@@ -62,8 +66,6 @@ public class TransformFieldVisitIT {
 	@ExpectedDatabase(value="classpath:/testResult/happyPath/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	@Test
 	public void processFieldVisitDataNewDataTest() {
-		request.setId(JSON_DATA_ID_1);
-		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
@@ -83,8 +85,6 @@ public class TransformFieldVisitIT {
 	@ExpectedDatabase(value="classpath:/testResult/happyPath/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	@Test
 	public void processFieldVisitDataOldDataToBeReplacedTest() {
-		request.setId(JSON_DATA_ID_1);
-		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
@@ -101,7 +101,6 @@ public class TransformFieldVisitIT {
 	@Test
 	public void notFoundTest() {
 		request.setId(JSON_DATA_ID_2);
-		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
@@ -114,7 +113,6 @@ public class TransformFieldVisitIT {
 	@Test
 	public void noGroundWaterLevelsFoundTest() {
 		request.setId(JSON_DATA_ID_3);
-		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());

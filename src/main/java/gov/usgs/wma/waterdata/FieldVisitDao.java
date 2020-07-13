@@ -29,12 +29,16 @@ public class FieldVisitDao {
 	private Resource deleteDiscreteGroundWaterData;
 
 	@Transactional
-	public List<FieldVisit> doInsertDiscreteGroundWaterData(Long jsonDataId) {
+	public List<FieldVisit> doInsertDiscreteGroundWaterData(RequestObject request) {
 		List<FieldVisit> fieldVisitList = Arrays.asList();
 		try {
-			fieldVisitList =  jdbcTemplate.query(getSql(insertDiscreteGroundWaterData), new FieldVisitRowMapper(), jsonDataId);
+			fieldVisitList =  jdbcTemplate.query(
+					getSql(insertDiscreteGroundWaterData),
+					new FieldVisitRowMapper(),
+					request.getId(),
+					request.getPartitionNumber());
 		} catch (EmptyResultDataAccessException e) {
-			LOG.info("Couldn't find {} - {} ", jsonDataId, e.getLocalizedMessage());
+			LOG.info("Couldn't find id: {} partition number: {} - {} ", request.getId(), request.getPartitionNumber(), e.getLocalizedMessage());
 		}
 		return fieldVisitList;
 	}
