@@ -66,9 +66,9 @@ public class FieldVisitDaoIT {
 	@Test
 	public void doInsertDiscreteGroundWaterDataTest() {
 		assertThat(fieldVisitDao.doInsertDiscreteGroundWaterData(request), containsInAnyOrder(
-				new FieldVisit("46686b86-77c8-4fef-8d72-a994a6a267a5"),
-				new FieldVisit("e251791c-4c7f-4a7c-9480-997f2eeb0b94"),
-				new FieldVisit("8BDA141822744BA5E0530100007FD075")
+				new FieldVisit(TransformFieldVisitIT.LOCATION_IDENTIFIER_1),
+				new FieldVisit(TransformFieldVisitIT.LOCATION_IDENTIFIER_1),
+				new FieldVisit(TransformFieldVisitIT.LOCATION_IDENTIFIER_1)
 		));
 
 		// Inserting the same data twice without deleting it first throws a duplicate key exception on the constraint

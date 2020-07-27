@@ -1,6 +1,5 @@
 package gov.usgs.wma.waterdata;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -32,7 +31,7 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 		ResultObject result = processRequest(request);
 		String transformStatus = result.getTransformStatus();
 		if (SUCCESS.equalsIgnoreCase(transformStatus)) {
-			LOG.debug("the result object: {}", result.getFieldVisitIdentifiers().toString());
+			LOG.debug("the result object location id: {}", result.getLocationIdentifier());
 			return result;
 		} else {
 			throw new RuntimeException(transformStatus);
@@ -65,19 +64,23 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 
 	protected ResultObject processFieldVisit(RequestObject request) {
 		ResultObject result = new ResultObject();
-		List<FieldVisit> fieldVisitList = loadDiscreteGroundWaterIntoTransformDb(request);
-		if (fieldVisitList.size() > 0) {
+
+		List<FieldVisit> locationIdentifierList = loadDiscreteGroundWaterIntoTransformDb(request);
+		int numberOfGwLevelsInserted = locationIdentifierList.size();
+
+		if (numberOfGwLevelsInserted > 0) {
 			result.setTransformStatus(SUCCESS);
+			// The location identifier will be the same for each record inserted
+			result.setLocationIdentifier(locationIdentifierList.get(0).getLocationIdentifier());
+			result.setNumberGwLevelsInserted(numberOfGwLevelsInserted);
 		} else {
 			// No groundwater levels for this site visit, proceed without error
 			result.setTransformStatus(SUCCESS);
+			result.setLocationIdentifier(null);
+			result.setNumberGwLevelsInserted(numberOfGwLevelsInserted);
 			LOG.debug(NO_GROUND_WATER_LEVELS_FOUND);
 		}
-		List<String> identifiers = new ArrayList<>();
-		for (FieldVisit fv : fieldVisitList) {
-			identifiers.add(fv.getFieldVisitIdentifier());
-		}
-		result.setFieldVisitIdentifiers(identifiers);
+
 		return result;
 	}
 

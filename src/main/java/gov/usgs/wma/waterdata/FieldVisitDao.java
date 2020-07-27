@@ -30,9 +30,9 @@ public class FieldVisitDao {
 
 	@Transactional
 	public List<FieldVisit> doInsertDiscreteGroundWaterData(RequestObject request) {
-		List<FieldVisit> fieldVisitList = Arrays.asList();
+		List<FieldVisit> locationIdentifierList = Arrays.asList();
 		try {
-			fieldVisitList =  jdbcTemplate.query(
+			locationIdentifierList =  jdbcTemplate.query(
 					getSql(insertDiscreteGroundWaterData),
 					new FieldVisitRowMapper(),
 					request.getId(),
@@ -40,7 +40,7 @@ public class FieldVisitDao {
 		} catch (EmptyResultDataAccessException e) {
 			LOG.info("Couldn't find id: {} partition number: {} - {} ", request.getId(), request.getPartitionNumber(), e.getLocalizedMessage());
 		}
-		return fieldVisitList;
+		return locationIdentifierList;
 	}
 
 	@Transactional

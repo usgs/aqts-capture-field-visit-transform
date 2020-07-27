@@ -9,6 +9,6 @@ public class FieldVisitRowMapper implements RowMapper<FieldVisit> {
 
     @Override
     public FieldVisit mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return new FieldVisit(rs.getString("field_visit_identifier"));
+        return new FieldVisit(rs.getString("location_identifier"));
     }
 }

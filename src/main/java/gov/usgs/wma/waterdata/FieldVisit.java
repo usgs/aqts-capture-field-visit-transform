@@ -3,14 +3,15 @@ package gov.usgs.wma.waterdata;
 import java.util.Objects;
 
 public class FieldVisit {
-    private String fieldVisitIdentifier;
 
-    public FieldVisit(String fieldVisitIdentifier) {
-        this.fieldVisitIdentifier = fieldVisitIdentifier;
+    private String locationIdentifier;
+
+    public FieldVisit(String locationIdentifier) {
+        this.locationIdentifier = locationIdentifier;
     }
 
-    public String getFieldVisitIdentifier() {
-        return fieldVisitIdentifier;
+    public String getLocationIdentifier() {
+        return locationIdentifier;
     }
 
     @Override
@@ -20,10 +21,10 @@ public class FieldVisit {
             return false;
         }
         FieldVisit fieldVisit = (FieldVisit) o;
-        return Objects.equals(fieldVisitIdentifier, fieldVisit.fieldVisitIdentifier);
+        return Objects.equals(locationIdentifier, fieldVisit.locationIdentifier);
     }
     @Override
     public int hashCode() {
-        return Objects.hash(fieldVisitIdentifier);
+        return Objects.hash(locationIdentifier);
     }
 }

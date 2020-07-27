@@ -72,4 +72,4 @@ from field_visit_header_info
 where field_visit_header_info.json_data_id = ?
 and lower(publish) = 'true'
 and field_visit_header_info.partition_number = ?
-returning field_visit_identifier;
+returning location_identifier;
