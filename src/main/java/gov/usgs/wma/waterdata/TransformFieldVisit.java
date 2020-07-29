@@ -1,6 +1,5 @@
 package gov.usgs.wma.waterdata;
 
-import java.util.List;
 import java.util.function.Function;
 
 import org.slf4j.Logger;
@@ -63,30 +62,21 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 	}
 
 	protected ResultObject processFieldVisit(RequestObject request) {
-		ResultObject result = new ResultObject();
-
-		List<FieldVisit> locationIdentifierList = loadDiscreteGroundWaterIntoTransformDb(request);
-		int numberOfGwLevelsInserted = locationIdentifierList.size();
-
-		if (numberOfGwLevelsInserted > 0) {
-			result.setTransformStatus(SUCCESS);
-			// The location identifier will be the same for each record inserted
-			result.setLocationIdentifier(locationIdentifierList.get(0).getLocationIdentifier());
-			result.setNumberGwLevelsInserted(numberOfGwLevelsInserted);
-		} else {
+		ResultObject result = loadDiscreteGroundWaterIntoTransformDb(request);
+		result.setTransformStatus(SUCCESS);
+		if (result.getNumberGwLevelsInserted() == 0) {
 			// No groundwater levels for this site visit, proceed without error
-			result.setTransformStatus(SUCCESS);
-			result.setLocationIdentifier(null);
-			result.setNumberGwLevelsInserted(numberOfGwLevelsInserted);
 			LOG.debug(NO_GROUND_WATER_LEVELS_FOUND);
 		}
-
 		return result;
 	}
 
 	@Transactional
-	protected List<FieldVisit> loadDiscreteGroundWaterIntoTransformDb (RequestObject request) {
+	protected ResultObject loadDiscreteGroundWaterIntoTransformDb (RequestObject request) {
+		// first delete existing records for a location from the discrete_ground_water table
 		fieldVisitDao.doDeleteDiscreteGroundWaterData(request.getId());
+
+		// next insert new/updated/existing records for a location into discrete_ground_water table
 		return fieldVisitDao.doInsertDiscreteGroundWaterData(request);
 	}
 
