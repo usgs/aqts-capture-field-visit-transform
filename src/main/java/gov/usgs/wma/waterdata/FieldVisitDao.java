@@ -37,7 +37,10 @@ public class FieldVisitDao {
 					request.getId(),
 					request.getPartitionNumber());
 		} catch (EmptyResultDataAccessException e) {
-			LOG.info("Couldn't find id: {} partition number: {} - {} ", request.getId(), request.getPartitionNumber(), e.getLocalizedMessage());
+			LOG.info("Couldn't find ground water levels for json_data_id: {} and partition_number: {} - {} ",
+					request.getId(),
+					request.getPartitionNumber(),
+					e.getLocalizedMessage());
 		}
 		ResultObject result = new ResultObject();
 		if (!responseMap.isEmpty()) {
