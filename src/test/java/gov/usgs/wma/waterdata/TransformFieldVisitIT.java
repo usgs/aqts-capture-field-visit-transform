@@ -1,9 +1,8 @@
 package gov.usgs.wma.waterdata;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,8 +27,6 @@ import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
-import java.util.Arrays;
-
 @SpringBootTest(webEnvironment=WebEnvironment.NONE,
 		classes={DBTestConfig.class, FieldVisitDao.class, TransformFieldVisit.class})
 @ActiveProfiles("it")
@@ -52,6 +49,7 @@ public class TransformFieldVisitIT {
 	public static final Long JSON_DATA_ID_2 = 2L;
 	public static final Long JSON_DATA_ID_3 = 3L;
 	public static final Integer PARTITION_NUMBER = 7;
+	public static final String LOCATION_IDENTIFIER_1 = "393215104490001";
 
 	@BeforeEach
 	public void beforeEach() {
@@ -69,11 +67,8 @@ public class TransformFieldVisitIT {
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
-		assertThat(result.getFieldVisitIdentifiers(), containsInAnyOrder(
-				"46686b86-77c8-4fef-8d72-a994a6a267a5",
-				"e251791c-4c7f-4a7c-9480-997f2eeb0b94",
-				"8BDA141822744BA5E0530100007FD075"
-		));
+		assertEquals(LOCATION_IDENTIFIER_1, result.getLocationIdentifier());
+		assertEquals(3, result.getNumberGwLevelsInserted());
 
 		// Processing the same data twice should not throw an exception
 		// the old rows will be replaced, this is a delete + add
@@ -88,11 +83,8 @@ public class TransformFieldVisitIT {
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
-		assertThat(result.getFieldVisitIdentifiers(), containsInAnyOrder(
-				"46686b86-77c8-4fef-8d72-a994a6a267a5",
-				"e251791c-4c7f-4a7c-9480-997f2eeb0b94",
-				"8BDA141822744BA5E0530100007FD075"
-		));
+		assertEquals(LOCATION_IDENTIFIER_1, result.getLocationIdentifier());
+		assertEquals(3, result.getNumberGwLevelsInserted());
 	}
 
 	@DatabaseSetup("classpath:/testData/")
@@ -104,7 +96,8 @@ public class TransformFieldVisitIT {
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
-		assertEquals(Arrays.asList(), result.getFieldVisitIdentifiers());
+		assertNull(result.getLocationIdentifier());
+		assertEquals(0, result.getNumberGwLevelsInserted());
 	}
 
 	@DatabaseSetup("classpath:/testData/")
@@ -116,6 +109,7 @@ public class TransformFieldVisitIT {
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
-		assertEquals(Arrays.asList(), result.getFieldVisitIdentifiers());
+		assertNull(result.getLocationIdentifier());
+		assertEquals(0, result.getNumberGwLevelsInserted());
 	}
 }

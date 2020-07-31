@@ -25,15 +25,7 @@ import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
-import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment=WebEnvironment.NONE,
 		classes={DBTestConfig.class, FieldVisitDao.class})
@@ -65,13 +57,11 @@ public class FieldVisitDaoIT {
 	@ExpectedDatabase(value="classpath:/testResult/happyPath/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	@Test
 	public void doInsertDiscreteGroundWaterDataTest() {
-		assertThat(fieldVisitDao.doInsertDiscreteGroundWaterData(request), containsInAnyOrder(
-				new FieldVisit("46686b86-77c8-4fef-8d72-a994a6a267a5"),
-				new FieldVisit("e251791c-4c7f-4a7c-9480-997f2eeb0b94"),
-				new FieldVisit("8BDA141822744BA5E0530100007FD075")
-		));
+		ResultObject result = fieldVisitDao.doInsertDiscreteGroundWaterData(request);
+		assertEquals(TransformFieldVisitIT.LOCATION_IDENTIFIER_1, result.getLocationIdentifier());
+		assertEquals(3, result.getNumberGwLevelsInserted());
 
-		// Inserting the same data twice without deleting it first throws a duplicate key exception on the constraint
+        // Inserting the same data twice without deleting it first throws a duplicate key exception on the constraint
 		assertThrows(DuplicateKeyException.class, () -> {
 			fieldVisitDao.doInsertDiscreteGroundWaterData(request);
 		}, "should have thrown a duplicate key exception but did not");
@@ -90,7 +80,9 @@ public class FieldVisitDaoIT {
 	@Test
 	public void notFoundTest() {
 		request.setId(TransformFieldVisitIT.JSON_DATA_ID_2);
-		assertEquals(fieldVisitDao.doInsertDiscreteGroundWaterData(request), Arrays.asList());
+		ResultObject result = fieldVisitDao.doInsertDiscreteGroundWaterData(request);
+		assertEquals(0, result.getNumberGwLevelsInserted());
+		assertNull(result.getLocationIdentifier());
 	}
 
 	@Test

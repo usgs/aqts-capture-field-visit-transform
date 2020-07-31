@@ -1,8 +1,8 @@
 package gov.usgs.wma.waterdata;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,18 +29,27 @@ public class FieldVisitDao {
 	private Resource deleteDiscreteGroundWaterData;
 
 	@Transactional
-	public List<FieldVisit> doInsertDiscreteGroundWaterData(RequestObject request) {
-		List<FieldVisit> fieldVisitList = Arrays.asList();
+	public ResultObject doInsertDiscreteGroundWaterData(RequestObject request) {
+		Map<String, Object> responseMap = new HashMap();
 		try {
-			fieldVisitList =  jdbcTemplate.query(
+			responseMap =  jdbcTemplate.queryForMap(
 					getSql(insertDiscreteGroundWaterData),
-					new FieldVisitRowMapper(),
 					request.getId(),
 					request.getPartitionNumber());
 		} catch (EmptyResultDataAccessException e) {
-			LOG.info("Couldn't find id: {} partition number: {} - {} ", request.getId(), request.getPartitionNumber(), e.getLocalizedMessage());
+			LOG.info("Couldn't find ground water levels for json_data_id: {} and partition_number: {} - {} ",
+					request.getId(),
+					request.getPartitionNumber(),
+					e.getLocalizedMessage());
 		}
-		return fieldVisitList;
+		ResultObject result = new ResultObject();
+		if (!responseMap.isEmpty()) {
+			result.setLocationIdentifier(String.valueOf(responseMap.get("location_identifier")));
+			result.setNumberGwLevelsInserted(Integer.parseInt(responseMap.get("records_inserted").toString()));
+		} else {
+			result.setNumberGwLevelsInserted(0);
+		}
+		return result;
 	}
 
 	@Transactional
