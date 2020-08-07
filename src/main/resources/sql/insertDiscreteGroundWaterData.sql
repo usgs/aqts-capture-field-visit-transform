@@ -52,9 +52,13 @@ with upd as (
           and lower(publish) = 'true'
           and field_visit_header_info.partition_number = ?
         returning location_identifier
-) select
-         location_identifier,
+)select
+        (
+            select location_identifier
+            from field_visit_header_info
+            where json_data_id = ?
+            and field_visit_header_info.partition_number = ?
+            fetch first 1 rows only
+        ) location_identifier,
          count(*) records_inserted
-from upd
-group by location_identifier
-fetch first 1 rows only;
+from upd;

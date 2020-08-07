@@ -35,6 +35,8 @@ public class FieldVisitDao {
 			responseMap =  jdbcTemplate.queryForMap(
 					getSql(insertDiscreteGroundWaterData),
 					request.getId(),
+					request.getPartitionNumber(),
+					request.getId(),
 					request.getPartitionNumber());
 		} catch (EmptyResultDataAccessException e) {
 			LOG.info("Couldn't find ground water levels for json_data_id: {} and partition_number: {} - {} ",
@@ -44,7 +46,13 @@ public class FieldVisitDao {
 		}
 		ResultObject result = new ResultObject();
 		if (!responseMap.isEmpty()) {
-			result.setLocationIdentifier(String.valueOf(responseMap.get("location_identifier")));
+			if (null == responseMap.get("location_identifier")) {
+				// set the location identifier to null, not string null
+				result.setLocationIdentifier(null);
+			} else {
+				// set the location identifier
+				result.setLocationIdentifier(String.valueOf(responseMap.get("location_identifier")));
+			}
 			result.setNumberGwLevelsInserted(Integer.parseInt(responseMap.get("records_inserted").toString()));
 		} else {
 			result.setNumberGwLevelsInserted(0);

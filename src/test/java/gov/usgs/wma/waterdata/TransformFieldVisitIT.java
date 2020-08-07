@@ -109,7 +109,7 @@ public class TransformFieldVisitIT {
 		ResultObject result = transformFieldVisit.processFieldVisit(request);
 		assertNotNull(result);
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
-		assertNull(result.getLocationIdentifier());
+		assertEquals("123456789",result.getLocationIdentifier());
 		assertEquals(0, result.getNumberGwLevelsInserted());
 	}
 }
