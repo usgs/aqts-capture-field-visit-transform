@@ -37,6 +37,8 @@ public class FieldVisitDao {
 					request.getId(),
 					request.getPartitionNumber(),
 					request.getId(),
+					request.getPartitionNumber(),
+					request.getId(),
 					request.getPartitionNumber());
 		} catch (EmptyResultDataAccessException e) {
 			LOG.info("Couldn't find ground water levels for json_data_id: {} and partition_number: {} - {} ",
@@ -44,15 +46,22 @@ public class FieldVisitDao {
 					request.getPartitionNumber(),
 					e.getLocalizedMessage());
 		}
+
 		ResultObject result = new ResultObject();
+
 		if (!responseMap.isEmpty()) {
-			if (null == responseMap.get("location_identifier")) {
-				// set the location identifier to null, not string null
-				result.setLocationIdentifier(null);
-			} else {
-				// set the location identifier
-				result.setLocationIdentifier(String.valueOf(responseMap.get("location_identifier")));
-			}
+
+			Object locationIdentifier = responseMap.get("location_identifier");
+			Object monitoringLocationIdentifier = responseMap.get("monitoring_location_identifier");
+
+			result.setLocationIdentifier(
+					null == locationIdentifier ? null : String.valueOf(locationIdentifier)
+			);
+
+			result.setMonitoringLocationIdentifier(
+					null == monitoringLocationIdentifier ? null : String.valueOf(monitoringLocationIdentifier)
+			);
+
 			result.setNumberGwLevelsInserted(Integer.parseInt(responseMap.get("records_inserted").toString()));
 		} else {
 			result.setNumberGwLevelsInserted(0);

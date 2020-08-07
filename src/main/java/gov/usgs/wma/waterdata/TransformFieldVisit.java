@@ -30,8 +30,9 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 		ResultObject result = processRequest(request);
 		String transformStatus = result.getTransformStatus();
 		if (SUCCESS.equalsIgnoreCase(transformStatus)) {
-			LOG.debug("the result object location id: {} and number of rows inserted: {}",
+			LOG.debug("the result location identifier: {} and monitoring location identifier:{} and number of rows inserted: {}",
 					result.getLocationIdentifier(),
+					result.getMonitoringLocationIdentifier(),
 					result.getNumberGwLevelsInserted());
 			return result;
 		} else {

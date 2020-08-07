@@ -59,6 +59,7 @@ public class FieldVisitDaoIT {
 	public void doInsertDiscreteGroundWaterDataTest() {
 		ResultObject result = fieldVisitDao.doInsertDiscreteGroundWaterData(request);
 		assertEquals(TransformFieldVisitIT.LOCATION_IDENTIFIER_1, result.getLocationIdentifier());
+		assertEquals(TransformFieldVisitIT.MONITORING_LOCATION_IDENTIFIER_1, result.getMonitoringLocationIdentifier());
 		assertEquals(3, result.getNumberGwLevelsInserted());
 
         // Inserting the same data twice without deleting it first throws a duplicate key exception on the constraint
@@ -83,6 +84,7 @@ public class FieldVisitDaoIT {
 		ResultObject result = fieldVisitDao.doInsertDiscreteGroundWaterData(request);
 		assertEquals(0, result.getNumberGwLevelsInserted());
 		assertNull(result.getLocationIdentifier());
+		assertNull(result.getMonitoringLocationIdentifier());
 	}
 
 	@Test
