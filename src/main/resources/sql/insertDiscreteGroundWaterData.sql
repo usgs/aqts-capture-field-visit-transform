@@ -52,22 +52,16 @@ with upd as (
           and lower(publish) = 'true'
           and field_visit_header_info.partition_number = ?
         returning location_identifier
+), identifiers as (
+    select
+        location_identifier,
+        coalesce(nullif((regexp_match(location_identifier, '(\d*)-*(.*)'))[2], ''), 'USGS') || '-' || (regexp_match(location_identifier, '(\d*)-*(.*)'))[1] monitoring_location_identifier
+    from field_visit_header_info
+    where json_data_id = ?
+      and field_visit_header_info.partition_number = ?
+        fetch first 1 rows only
 ) select
-        (
-            select
-                location_identifier
-            from field_visit_header_info
-            where json_data_id = ?
-              and field_visit_header_info.partition_number = ?
-                fetch first 1 rows only
-        ) location_identifier,
-        (
-            select
-                coalesce(nullif((regexp_match(location_identifier, '(\d*)-*(.*)'))[2], ''), 'USGS') || '-' || (regexp_match(location_identifier, '(\d*)-*(.*)'))[1] monitoring_location_identifier
-            from field_visit_header_info
-            where json_data_id = ?
-              and field_visit_header_info.partition_number = ?
-                fetch first 1 rows only
-        ) monitoring_location_identifier,
+        (select location_identifier from identifiers),
+        (select monitoring_location_identifier from identifiers),
          count(*) records_inserted
 from upd;
