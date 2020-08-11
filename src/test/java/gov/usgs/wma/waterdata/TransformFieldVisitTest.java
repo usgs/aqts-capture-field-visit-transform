@@ -19,7 +19,6 @@ public class TransformFieldVisitTest {
 
 	private TransformFieldVisit transformFieldVisit;
 	private RequestObject request;
-	private ResultObject result;
 	@MockBean
 	private FieldVisitDao fieldVisitDao;
 
@@ -27,7 +26,7 @@ public class TransformFieldVisitTest {
 	public void beforeEach() {
 		transformFieldVisit = new TransformFieldVisit(fieldVisitDao);
 		request = new RequestObject();
-		result = new ResultObject();
+		ResultObject result = new ResultObject();
 		request.setId(TransformFieldVisitIT.JSON_DATA_ID_1);
 		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
 		result.setLocationIdentifier(TransformFieldVisitIT.LOCATION_IDENTIFIER_1);

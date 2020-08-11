@@ -1,7 +1,6 @@
 package gov.usgs.wma.waterdata;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -9,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,20 +28,14 @@ public class FieldVisitDao {
 
 	@Transactional
 	public ResultObject doInsertDiscreteGroundWaterData(RequestObject request) {
-		Map<String, Object> responseMap = new HashMap();
-		try {
-			responseMap =  jdbcTemplate.queryForMap(
-					getSql(insertDiscreteGroundWaterData),
-					request.getId(),
-					request.getPartitionNumber(),
-					request.getId(),
-					request.getPartitionNumber());
-		} catch (EmptyResultDataAccessException e) {
-			LOG.info("Couldn't find ground water levels for json_data_id: {} and partition_number: {} - {} ",
-					request.getId(),
-					request.getPartitionNumber(),
-					e.getLocalizedMessage());
-		}
+		Map<String, Object> responseMap;
+
+		responseMap =  jdbcTemplate.queryForMap(
+				getSql(insertDiscreteGroundWaterData),
+				request.getId(),
+				request.getPartitionNumber(),
+				request.getId(),
+				request.getPartitionNumber());
 
 		ResultObject result = new ResultObject();
 

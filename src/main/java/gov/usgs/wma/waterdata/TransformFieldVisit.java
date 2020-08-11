@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TransformFieldVisit implements Function<RequestObject, ResultObject> {
 	private static final Logger LOG = LoggerFactory.getLogger(TransformFieldVisit.class);
 
-	private FieldVisitDao fieldVisitDao;
+	private final FieldVisitDao fieldVisitDao;
 
 	public static final String FIELD_VISIT_DATA = "fieldVisitData";
 	public static final String SUCCESS = "success";

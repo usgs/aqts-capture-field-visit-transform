@@ -25,7 +25,11 @@ import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest(webEnvironment=WebEnvironment.NONE,
 		classes={DBTestConfig.class, FieldVisitDao.class})
