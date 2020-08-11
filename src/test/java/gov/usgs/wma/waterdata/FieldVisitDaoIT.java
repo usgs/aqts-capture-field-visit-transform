@@ -25,7 +25,11 @@ import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest(webEnvironment=WebEnvironment.NONE,
 		classes={DBTestConfig.class, FieldVisitDao.class})
@@ -59,6 +63,7 @@ public class FieldVisitDaoIT {
 	public void doInsertDiscreteGroundWaterDataTest() {
 		ResultObject result = fieldVisitDao.doInsertDiscreteGroundWaterData(request);
 		assertEquals(TransformFieldVisitIT.LOCATION_IDENTIFIER_1, result.getLocationIdentifier());
+		assertEquals(TransformFieldVisitIT.MONITORING_LOCATION_IDENTIFIER_1, result.getMonitoringLocationIdentifier());
 		assertEquals(3, result.getNumberGwLevelsInserted());
 
         // Inserting the same data twice without deleting it first throws a duplicate key exception on the constraint
@@ -83,6 +88,7 @@ public class FieldVisitDaoIT {
 		ResultObject result = fieldVisitDao.doInsertDiscreteGroundWaterData(request);
 		assertEquals(0, result.getNumberGwLevelsInserted());
 		assertNull(result.getLocationIdentifier());
+		assertNull(result.getMonitoringLocationIdentifier());
 	}
 
 	@Test

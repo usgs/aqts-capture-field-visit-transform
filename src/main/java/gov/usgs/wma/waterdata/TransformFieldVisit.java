@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TransformFieldVisit implements Function<RequestObject, ResultObject> {
 	private static final Logger LOG = LoggerFactory.getLogger(TransformFieldVisit.class);
 
-	private FieldVisitDao fieldVisitDao;
+	private final FieldVisitDao fieldVisitDao;
 
 	public static final String FIELD_VISIT_DATA = "fieldVisitData";
 	public static final String SUCCESS = "success";
@@ -30,8 +30,9 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 		ResultObject result = processRequest(request);
 		String transformStatus = result.getTransformStatus();
 		if (SUCCESS.equalsIgnoreCase(transformStatus)) {
-			LOG.debug("the result object location id: {} and number of rows inserted: {}",
+			LOG.debug("the result location identifier: {} and monitoring location identifier:{} and number of rows inserted: {}",
 					result.getLocationIdentifier(),
+					result.getMonitoringLocationIdentifier(),
 					result.getNumberGwLevelsInserted());
 			return result;
 		} else {
