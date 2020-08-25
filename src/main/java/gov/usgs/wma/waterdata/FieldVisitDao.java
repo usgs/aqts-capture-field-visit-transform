@@ -34,6 +34,7 @@ public class FieldVisitDao {
 				getSql(insertDiscreteGroundWaterData),
 				request.getId(),
 				request.getPartitionNumber(),
+				request.getPartitionNumber(),
 				request.getId(),
 				request.getPartitionNumber());
 
