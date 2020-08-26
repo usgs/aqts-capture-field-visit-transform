@@ -6,7 +6,7 @@ with upd as (
                                        manufacturer, model, serial_number, field_visit_time, field_visit_comments,
                                        publish, is_valid_readings, reference_point_unique_id,
                                        use_location_datum_as_reference, reading_qualifier, reading_qualifiers,
-                                       ground_water_measurement
+                                       ground_water_measurement, datum
         )
         select field_visit_header_info.field_visit_identifier
              , location_identifier
@@ -37,6 +37,7 @@ with upd as (
              , reading_qualifier
              , reading_qualifiers
              , ground_water_measurement
+             , datum_converted_values.target_datum datum
 
         from field_visit_header_info
                  join field_visit_readings
@@ -44,6 +45,7 @@ with upd as (
                           and field_visit_header_info.field_visit_identifier = field_visit_readings.field_visit_identifier
                  join field_visit_readings_by_loc
                       on field_visit_header_info.field_visit_identifier = field_visit_readings_by_loc.field_visit_identifier
+                          and field_visit_readings.field_visit_time = field_visit_readings_by_loc.field_visit_time
                  join datum_converted_values
                       on field_visit_readings_by_loc.json_data_id = datum_converted_values.json_data_id
                           and field_visit_readings_by_loc.field_visit_identifier = datum_converted_values.field_visit_identifier
@@ -56,6 +58,8 @@ with upd as (
           and lower(field_visit_readings.publish) = 'true'
           and field_visit_header_info.partition_number = ?
           and field_visit_readings.partition_number = ?
+          and field_visit_readings_by_loc.partition_number = ?
+          and datum_converted_values.partition_number = ?
         returning location_identifier
 ), identifiers as (
 -- identifiers is here so that we always return the monitoring_location_identifier and location_identifier for downstream
