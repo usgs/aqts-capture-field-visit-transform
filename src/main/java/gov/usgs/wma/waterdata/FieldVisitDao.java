@@ -35,8 +35,8 @@ public class FieldVisitDao {
 				request.getId(),
 				request.getPartitionNumber(),
 				request.getPartitionNumber(),
-				request.getPartitionNumber(),
-				request.getPartitionNumber(),
+//				request.getPartitionNumber(),
+//				request.getPartitionNumber(),
 				request.getId(),
 				request.getPartitionNumber());
 
