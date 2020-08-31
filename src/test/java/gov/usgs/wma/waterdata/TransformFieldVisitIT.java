@@ -60,7 +60,7 @@ public class TransformFieldVisitIT {
 	public void beforeEach() {
 		request = new RequestObject();
 		request.setId(JSON_DATA_ID_1);
-		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
+		request.setType(TransformFieldVisit.FIELD_VISIT_READINGS);
 		request.setPartitionNumber(TransformFieldVisitIT.PARTITION_NUMBER);
 	}
 

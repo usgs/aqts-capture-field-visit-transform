@@ -28,7 +28,7 @@ public class TransformFieldVisitTest {
 		request = new RequestObject();
 		ResultObject result = new ResultObject();
 		request.setId(TransformFieldVisitIT.JSON_DATA_ID_1);
-		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
+		request.setType(TransformFieldVisit.FIELD_VISIT_READINGS);
 		result.setLocationIdentifier(TransformFieldVisitIT.LOCATION_IDENTIFIER_1);
 		result.setNumberGwLevelsInserted(3);
 		when(fieldVisitDao.doInsertDiscreteGroundWaterData(request)).thenReturn(result);
