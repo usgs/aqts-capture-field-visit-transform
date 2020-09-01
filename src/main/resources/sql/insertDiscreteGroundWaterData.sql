@@ -71,8 +71,6 @@ with upd as (
                  join data_type_mapping
                       on aq_to_nwis_parm.parm_cd = data_type_mapping.parm_cd
                           and data_type_mapping.data_type = 'discreteGroundWaterTransform'
-                 join json_data
-                    on field_visit_readings_by_loc.json_data_id = json_data.json_data_id
         where field_visit_readings_by_loc.json_data_id = ?
           and lower(field_visit_readings_by_loc.publish) = 'true'
           and field_visit_readings_by_loc.partition_number = ?
