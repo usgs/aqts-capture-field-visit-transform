@@ -77,7 +77,7 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 	@Transactional
 	protected ResultObject loadDiscreteGroundWaterIntoTransformDb (RequestObject request) {
 		// first delete existing records for a location from the discrete_ground_water table
-		fieldVisitDao.doDeleteDiscreteGroundWaterData(request.getId());
+		fieldVisitDao.doDeleteDiscreteGroundWaterData(request);
 
 		// next insert new/updated/existing records for a location into discrete_ground_water table
 		return fieldVisitDao.doInsertDiscreteGroundWaterData(request);

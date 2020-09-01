@@ -93,7 +93,7 @@ public class FieldVisitDaoIT {
 	@ExpectedDatabase(value="classpath:/testResult/cleanseOutput/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	@Test
 	public void doDeleteDiscreteGroundWaterDataTest() {
-		fieldVisitDao.doDeleteDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_1);
+		fieldVisitDao.doDeleteDiscreteGroundWaterData(request);
 	}
 
 	@DatabaseSetup("classpath:/testResult/newRowsInserted/")
@@ -102,7 +102,8 @@ public class FieldVisitDaoIT {
 	public void doDeleteDiscreteGroundWaterDataWithDifferentIdTest() {
 		// make sure we only delete rows associated with the json_data_id being tested, leaving the rest of the data
 		// in place
-		fieldVisitDao.doDeleteDiscreteGroundWaterData(TransformFieldVisitIT.JSON_DATA_ID_4);
+		request.setId(TransformFieldVisitIT.JSON_DATA_ID_4);
+		fieldVisitDao.doDeleteDiscreteGroundWaterData(request);
 	}
 
 	@DatabaseSetup("classpath:/testData/")

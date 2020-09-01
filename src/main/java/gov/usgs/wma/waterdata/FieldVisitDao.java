@@ -35,8 +35,6 @@ public class FieldVisitDao {
 				request.getId(),
 				request.getPartitionNumber(),
 				request.getPartitionNumber(),
-//				request.getPartitionNumber(),
-//				request.getPartitionNumber(),
 				request.getId(),
 				request.getPartitionNumber());
 
@@ -63,8 +61,11 @@ public class FieldVisitDao {
 	}
 
 	@Transactional
-	public int doDeleteDiscreteGroundWaterData(Long jsonDataId) {
-		return jdbcTemplate.update(getSql(deleteDiscreteGroundWaterData), jsonDataId);
+	public int doDeleteDiscreteGroundWaterData(RequestObject request) {
+		return jdbcTemplate.update(
+				getSql(deleteDiscreteGroundWaterData),
+				request.getId(),
+				request.getPartitionNumber());
 	}
 
 	protected String getSql(Resource resource) {
