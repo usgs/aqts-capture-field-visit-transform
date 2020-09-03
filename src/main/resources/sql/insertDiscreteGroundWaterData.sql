@@ -31,6 +31,13 @@ with upd as (
 --                                        ground_water_measurement,
                                        datum
         )
+        /*
+            This query grabs the datum converted values and maps them to an NWIS parameter code using the datum and the
+            unit.
+            For now, parameter code 62610, 62600, and 62601 have duplicate datum/unit values, and cannot be uniquely
+            mapped to an NWIS parameter code.  We have been told to use 62610 for now, so the other two are excluded
+            in the where clause.
+        */
         select field_visit_readings_by_loc.field_visit_identifier
              , field_visit_readings_by_loc.location_identifier
              , aq_to_nwis_parm.parameter
@@ -66,8 +73,17 @@ with upd as (
           and lower(field_visit_readings_by_loc.publish) = 'true'
           and aq_to_nwis_parm.parm_cd not in ('62600', '62601')
 
+        /*
+            Union is grabbing the non-duplicate values for these two unique datasets so that we can have both the
+            original discrete groundwater level value from the GetFieldVisitReadingsByLocation call, and the the datum
+            converted values while mapping both to a corresponding NWIS parameter code.
+        */
         union
 
+        /*
+            This query grabs the original discrete groundwater level value and maps it to an NWIS parameter code using
+            the parameter long name concatenated with the unit.
+        */
         select field_visit_readings_by_loc.field_visit_identifier
              , field_visit_readings_by_loc.location_identifier
              , aq_to_nwis_parm.parameter
@@ -96,12 +112,13 @@ with upd as (
         where field_visit_readings_by_loc.json_data_id = ?
           and field_visit_readings_by_loc.partition_number = ?
           and lower(field_visit_readings_by_loc.publish) = 'true'
-          and aq_to_nwis_parm.parm_cd not in ('62600', '62601')
 
         returning location_identifier
 ), identifiers as (
--- identifiers is here so that we always return the monitoring_location_identifier and location_identifier for downstream
--- orphan handling/delete capabilities.
+    /*
+        identifiers is here so that we always return the monitoring_location_identifier and location_identifier for
+        downstream orphan handling/delete capabilities.
+    */
     select
         location_identifier,
         coalesce(nullif((regexp_match(location_identifier, '(\d*)-*(.*)'))[2], ''), 'USGS') || '-' || (regexp_match(location_identifier, '(\d*)-*(.*)'))[1] monitoring_location_identifier
