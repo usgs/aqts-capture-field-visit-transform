@@ -74,7 +74,7 @@ public class TransformFieldVisitIT {
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
 		assertEquals(LOCATION_IDENTIFIER_1, result.getLocationIdentifier());
 		assertEquals(TransformFieldVisitIT.MONITORING_LOCATION_IDENTIFIER_1, result.getMonitoringLocationIdentifier());
-		assertEquals(9, result.getNumberGwLevelsInserted());
+		assertEquals(12, result.getNumberGwLevelsInserted());
 
 		// Processing the same data twice should not throw an exception
 		// the old rows will be replaced, this is a delete + add
@@ -91,7 +91,7 @@ public class TransformFieldVisitIT {
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
 		assertEquals(LOCATION_IDENTIFIER_1, result.getLocationIdentifier());
 		assertEquals(TransformFieldVisitIT.MONITORING_LOCATION_IDENTIFIER_1, result.getMonitoringLocationIdentifier());
-		assertEquals(9, result.getNumberGwLevelsInserted());
+		assertEquals(12, result.getNumberGwLevelsInserted());
 	}
 
 	@DatabaseSetup("classpath:/testData/")
@@ -105,7 +105,7 @@ public class TransformFieldVisitIT {
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
 		assertEquals(LOCATION_IDENTIFIER_2, result.getLocationIdentifier());
 		assertEquals(TransformFieldVisitIT.MONITORING_LOCATION_IDENTIFIER_2, result.getMonitoringLocationIdentifier());
-		assertEquals(9, result.getNumberGwLevelsInserted());
+		assertEquals(12, result.getNumberGwLevelsInserted());
 	}
 
 	@DatabaseSetup("classpath:/testData/")

@@ -76,7 +76,8 @@ with upd as (
         /*
             Union is grabbing the non-duplicate values for these two unique datasets so that we can have both the
             original discrete groundwater level value from the GetFieldVisitReadingsByLocation call, and the the datum
-            converted values while mapping both to a corresponding NWIS parameter code.
+            converted values while mapping both to a corresponding NWIS parameter code - which have different mapping
+            conditions.
         */
         union
 
@@ -123,7 +124,7 @@ with upd as (
         location_identifier,
         coalesce(nullif((regexp_match(location_identifier, '(\d*)-*(.*)'))[2], ''), 'USGS') || '-' || (regexp_match(location_identifier, '(\d*)-*(.*)'))[1] monitoring_location_identifier
     from field_visit_readings_by_loc
-    where json_data_id = ?
+    where field_visit_readings_by_loc.json_data_id = ?
       and field_visit_readings_by_loc.partition_number = ?
         fetch first 1 rows only
 ) select

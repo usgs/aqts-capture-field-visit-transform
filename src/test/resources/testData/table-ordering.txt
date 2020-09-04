@@ -1,4 +1,3 @@
-json_data
 field_visit_readings_by_loc
 datum_converted_values
 aq_to_nwis_parm

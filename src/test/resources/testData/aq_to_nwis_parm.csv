@@ -14,5 +14,6 @@ parameter,parm_cd,datum,unit
 "Elevation, correct BP, NGVD29|ft",62600,NGVD29,ft
 "Elevation, water, inc, NGVD29|ft",62601,NGVD29,ft
 "Water level, depth LSD|ft",72019,depth LSD,ft
+"Water level, depth LSD|ft",72019,Local Assumed Datum,ft
 "Water level, depth LSD|m",30210,depth LSD,m
 "Water level, depth MP|ft",61055,depth MP,ft
