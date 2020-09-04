@@ -32,21 +32,16 @@ public class FieldVisitDao {
 
 		responseMap =  jdbcTemplate.queryForMap(
 				getSql(insertDiscreteGroundWaterData),
-				// first select
+				// first select to get datum converted values
 				request.getId(),
 				request.getPartitionNumber(),
 				request.getPartitionNumber(),
-
 				// union select to get original value and parameter
 				request.getId(),
 				request.getPartitionNumber(),
-
 				// identifiers
 				request.getId(),
 				request.getPartitionNumber());
-
-
-
 		ResultObject result = new ResultObject();
 
 		if (!responseMap.isEmpty()) {
