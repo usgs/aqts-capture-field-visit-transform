@@ -6,8 +6,8 @@ provider:
   stage: ${opt:stage, 'TEST'}
   runtime: java11
   memorySize: 768
-  timeout: 60
-  logRetentionInDays: 30
+  timeout: 90
+  logRetentionInDays: 90
   deploymentBucket:
     name: iow-cloud-applications
   stackTags:

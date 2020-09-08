@@ -32,11 +32,16 @@ public class FieldVisitDao {
 
 		responseMap =  jdbcTemplate.queryForMap(
 				getSql(insertDiscreteGroundWaterData),
+				// first select to get datum converted values
 				request.getId(),
 				request.getPartitionNumber(),
+				request.getPartitionNumber(),
+				// union select to get original value and parameter
+				request.getId(),
+				request.getPartitionNumber(),
+				// identifiers
 				request.getId(),
 				request.getPartitionNumber());
-
 		ResultObject result = new ResultObject();
 
 		if (!responseMap.isEmpty()) {
@@ -60,8 +65,11 @@ public class FieldVisitDao {
 	}
 
 	@Transactional
-	public int doDeleteDiscreteGroundWaterData(Long jsonDataId) {
-		return jdbcTemplate.update(getSql(deleteDiscreteGroundWaterData), jsonDataId);
+	public int doDeleteDiscreteGroundWaterData(RequestObject request) {
+		return jdbcTemplate.update(
+				getSql(deleteDiscreteGroundWaterData),
+				request.getId(),
+				request.getPartitionNumber());
 	}
 
 	protected String getSql(Resource resource) {

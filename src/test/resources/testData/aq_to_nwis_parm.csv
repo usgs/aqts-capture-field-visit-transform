@@ -1,3 +1,19 @@
-parm_cd,parameter
-61055,"Water level, depth MP|ft"
-72150,"Elevation, GW, MSL|ft"
+parameter,parm_cd,datum,unit
+"Elevation, GW, ASVD02|ft",72227,ASVD02,ft
+"Elevation, GW, ASVD62|ft",72226,ASVD62,ft
+"Elevation, GW, GUVD04|ft",72229,GUVD04,ft
+"Elevation, GW, GUVD63|ft",72228,GUVD63,ft
+"Elevation, GW, HILOCAL|ft",72230,HILOCAL,ft
+"Elevation, GW, MSL|ft",72150,MSL,ft
+"Elevation, GW, NAVD88|ft",62611,NAVD88,ft
+"Elevation, GW, NAVD88|m",62613,NAVD88,m
+"Elevation, GW, NGVD29|ft",62610,NGVD29,ft
+"Elevation, GW, NGVD29|m",62612,NGVD29,m
+"Elevation, GW, NMVD03|ft",72231,NMVD03,ft
+"Elevation, GW, PRVD02|ft",72232,PRVD02,ft
+"Elevation, correct BP, NGVD29|ft",62600,NGVD29,ft
+"Elevation, water, inc, NGVD29|ft",62601,NGVD29,ft
+"Water level, depth LSD|ft",72019,depth LSD,ft
+"Water level, depth LSD|ft",72019,Local Assumed Datum,ft
+"Water level, depth LSD|m",30210,depth LSD,m
+"Water level, depth MP|ft",61055,depth MP,ft

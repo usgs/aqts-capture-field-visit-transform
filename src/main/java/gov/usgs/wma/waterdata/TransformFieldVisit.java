@@ -14,7 +14,7 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 
 	private final FieldVisitDao fieldVisitDao;
 
-	public static final String FIELD_VISIT_DATA = "fieldVisitData";
+	public static final String FIELD_VISIT_READINGS = "fieldVisitReadings";
 	public static final String SUCCESS = "success";
 	public static final String NO_GROUND_WATER_LEVELS_FOUND = "no ground water levels for this id";
 	public static final String REQUEST_TYPE_NOT_A_FIELD_VISIT = "request type was not a field visit";
@@ -54,7 +54,7 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 
 	protected ResultObject processRequestType(RequestObject request) {
 		ResultObject result = null;
-		if (FIELD_VISIT_DATA.equalsIgnoreCase(request.getType())) {
+		if (FIELD_VISIT_READINGS.equalsIgnoreCase(request.getType())) {
 			result = processFieldVisit(request);
 		} else {
 			// It's possible one could route the wrong type of data to this lambda via the state machine.
@@ -77,7 +77,7 @@ public class TransformFieldVisit implements Function<RequestObject, ResultObject
 	@Transactional
 	protected ResultObject loadDiscreteGroundWaterIntoTransformDb (RequestObject request) {
 		// first delete existing records for a location from the discrete_ground_water table
-		fieldVisitDao.doDeleteDiscreteGroundWaterData(request.getId());
+		fieldVisitDao.doDeleteDiscreteGroundWaterData(request);
 
 		// next insert new/updated/existing records for a location into discrete_ground_water table
 		return fieldVisitDao.doInsertDiscreteGroundWaterData(request);

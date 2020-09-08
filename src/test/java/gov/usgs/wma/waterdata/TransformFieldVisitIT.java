@@ -48,15 +48,19 @@ public class TransformFieldVisitIT {
 	public static final Long JSON_DATA_ID_1 = 1L;
 	public static final Long JSON_DATA_ID_2 = 2L;
 	public static final Long JSON_DATA_ID_3 = 3L;
+	public static final Long JSON_DATA_ID_4 = 4L;
 	public static final Integer PARTITION_NUMBER = 7;
 	public static final String LOCATION_IDENTIFIER_1 = "393215104490001";
+	public static final String LOCATION_IDENTIFIER_2 = "393215104490002";
 	public static final String MONITORING_LOCATION_IDENTIFIER_1 = "USGS-393215104490001";
+	public static final String MONITORING_LOCATION_IDENTIFIER_2 = "USGS-393215104490002";
+
 
 	@BeforeEach
 	public void beforeEach() {
 		request = new RequestObject();
 		request.setId(JSON_DATA_ID_1);
-		request.setType(TransformFieldVisit.FIELD_VISIT_DATA);
+		request.setType(TransformFieldVisit.FIELD_VISIT_READINGS);
 		request.setPartitionNumber(TransformFieldVisitIT.PARTITION_NUMBER);
 	}
 
@@ -70,7 +74,7 @@ public class TransformFieldVisitIT {
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
 		assertEquals(LOCATION_IDENTIFIER_1, result.getLocationIdentifier());
 		assertEquals(TransformFieldVisitIT.MONITORING_LOCATION_IDENTIFIER_1, result.getMonitoringLocationIdentifier());
-		assertEquals(3, result.getNumberGwLevelsInserted());
+		assertEquals(12, result.getNumberGwLevelsInserted());
 
 		// Processing the same data twice should not throw an exception
 		// the old rows will be replaced, this is a delete + add
@@ -87,7 +91,21 @@ public class TransformFieldVisitIT {
 		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
 		assertEquals(LOCATION_IDENTIFIER_1, result.getLocationIdentifier());
 		assertEquals(TransformFieldVisitIT.MONITORING_LOCATION_IDENTIFIER_1, result.getMonitoringLocationIdentifier());
-		assertEquals(3, result.getNumberGwLevelsInserted());
+		assertEquals(12, result.getNumberGwLevelsInserted());
+	}
+
+	@DatabaseSetup("classpath:/testData/")
+	@DatabaseSetup("classpath:/testResult/happyPath/")
+	@ExpectedDatabase(value="classpath:/testResult/newRowsInserted/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	@Test
+	public void processFieldVisitDataNewRowsInsertedTest() {
+		request.setId(TransformFieldVisitIT.JSON_DATA_ID_4);
+		ResultObject result = transformFieldVisit.processFieldVisit(request);
+		assertNotNull(result);
+		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
+		assertEquals(LOCATION_IDENTIFIER_2, result.getLocationIdentifier());
+		assertEquals(TransformFieldVisitIT.MONITORING_LOCATION_IDENTIFIER_2, result.getMonitoringLocationIdentifier());
+		assertEquals(12, result.getNumberGwLevelsInserted());
 	}
 
 	@DatabaseSetup("classpath:/testData/")
