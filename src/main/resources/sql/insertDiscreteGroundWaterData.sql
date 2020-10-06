@@ -57,7 +57,6 @@ with upd as (
              , field_visit_readings_by_loc.use_location_datum_as_reference
              , field_visit_readings_by_loc.qualifiers
              , aq_to_nwis_parm.datum
---              , jsonb_extract_path_text(field_visit_header_info.completed_work, 'CollectionAgency') collection_agency
 
         from field_visit_readings_by_loc
                  join datum_converted_values
@@ -75,6 +74,8 @@ with upd as (
         where field_visit_readings_by_loc.json_data_id = ?
           and field_visit_readings_by_loc.partition_number = ?
           and datum_converted_values.partition_number = ?
+          and field_visit_header_info.json_data_id = ?
+          and field_visit_header_info.partition_number = ?
           and lower(field_visit_readings_by_loc.publish) = 'true'
           and aq_to_nwis_parm.parm_cd not in ('62600', '62601')
 
@@ -109,7 +110,6 @@ with upd as (
              , field_visit_readings_by_loc.use_location_datum_as_reference
              , field_visit_readings_by_loc.qualifiers
              , aq_to_nwis_parm.datum
---              , jsonb_extract_path_text(field_visit_header_info.completed_work, 'CollectionAgency') collection_agency
 
         from field_visit_readings_by_loc
                  join field_visit_header_info
@@ -122,6 +122,8 @@ with upd as (
                           and data_type_mapping.data_type = 'discreteGroundWaterTransform'
         where field_visit_readings_by_loc.json_data_id = ?
           and field_visit_readings_by_loc.partition_number = ?
+          and field_visit_header_info.json_data_id = ?
+          and field_visit_header_info.partition_number = ?
           and lower(field_visit_readings_by_loc.publish) = 'true'
 
         returning location_identifier
