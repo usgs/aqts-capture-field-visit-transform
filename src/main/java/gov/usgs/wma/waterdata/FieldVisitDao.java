@@ -36,7 +36,11 @@ public class FieldVisitDao {
 				request.getId(),
 				request.getPartitionNumber(),
 				request.getPartitionNumber(),
+				request.getId(),
+				request.getPartitionNumber(),
 				// union select to get original value and parameter
+				request.getId(),
+				request.getPartitionNumber(),
 				request.getId(),
 				request.getPartitionNumber(),
 				// identifiers

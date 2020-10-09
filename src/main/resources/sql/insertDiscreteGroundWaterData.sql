@@ -8,11 +8,12 @@ with upd as (
 --                                        remarks,
 --                                        weather,
 --                                        is_valid_header_info,
---                                        completed_work,
+                                       completed_work,
 --                                        last_modified,
                                        parameter,
                                        parm_cd,
                                        monitoring_method,
+                                       nwis_method_code,
                                        field_visit_value,
                                        unit,
                                        uncertainty,
@@ -40,9 +41,11 @@ with upd as (
         */
         select field_visit_readings_by_loc.field_visit_identifier
              , field_visit_readings_by_loc.location_identifier
+             , field_visit_header_info.completed_work
              , aq_to_nwis_parm.parameter
              , aq_to_nwis_parm.parm_cd
              , field_visit_readings_by_loc.monitoring_method
+             , aq_to_nwis_method_code.nwis_method_code
              , datum_converted_values.display_value field_visit_value
              , field_visit_readings_by_loc.unit
              , field_visit_readings_by_loc.quantitative_uncertainty uncertainty
@@ -61,15 +64,22 @@ with upd as (
                  join datum_converted_values
                       on field_visit_readings_by_loc.json_data_id = datum_converted_values.json_data_id
                           and field_visit_readings_by_loc.field_visit_identifier = datum_converted_values.field_visit_identifier
+                 join field_visit_header_info
+                      on field_visit_header_info.json_data_id = datum_converted_values.json_data_id
+                          and field_visit_header_info.field_visit_identifier = datum_converted_values.field_visit_identifier
                  join aq_to_nwis_parm
                       on datum_converted_values.target_datum = aq_to_nwis_parm.datum
                           and datum_converted_values.unit = aq_to_nwis_parm.unit
                  join data_type_mapping
                       on aq_to_nwis_parm.parm_cd = data_type_mapping.parm_cd
                           and data_type_mapping.data_type = 'discreteGroundWaterTransform'
+                 join aq_to_nwis_method_code
+                      on field_visit_readings_by_loc.monitoring_method = aq_to_nwis_method_code.aqts_monitoring_method
         where field_visit_readings_by_loc.json_data_id = ?
           and field_visit_readings_by_loc.partition_number = ?
           and datum_converted_values.partition_number = ?
+          and field_visit_header_info.json_data_id = ?
+          and field_visit_header_info.partition_number = ?
           and lower(field_visit_readings_by_loc.publish) = 'true'
           and aq_to_nwis_parm.parm_cd not in ('62600', '62601')
 
@@ -87,9 +97,11 @@ with upd as (
         */
         select field_visit_readings_by_loc.field_visit_identifier
              , field_visit_readings_by_loc.location_identifier
+             , field_visit_header_info.completed_work
              , aq_to_nwis_parm.parameter
              , aq_to_nwis_parm.parm_cd
              , field_visit_readings_by_loc.monitoring_method
+             , aq_to_nwis_method_code.nwis_method_code
              , field_visit_readings_by_loc.display_value field_visit_value
              , field_visit_readings_by_loc.unit
              , field_visit_readings_by_loc.quantitative_uncertainty uncertainty
@@ -105,13 +117,20 @@ with upd as (
              , aq_to_nwis_parm.datum
 
         from field_visit_readings_by_loc
+                 join field_visit_header_info
+                      on field_visit_header_info.json_data_id = field_visit_readings_by_loc.json_data_id
+                          and field_visit_header_info.field_visit_identifier = field_visit_readings_by_loc.field_visit_identifier
                  join aq_to_nwis_parm
                       on field_visit_readings_by_loc.parameter || '|' || field_visit_readings_by_loc.unit = aq_to_nwis_parm.parameter
                  join data_type_mapping
                       on aq_to_nwis_parm.parm_cd = data_type_mapping.parm_cd
                           and data_type_mapping.data_type = 'discreteGroundWaterTransform'
+                 join aq_to_nwis_method_code
+                      on field_visit_readings_by_loc.monitoring_method = aq_to_nwis_method_code.aqts_monitoring_method
         where field_visit_readings_by_loc.json_data_id = ?
           and field_visit_readings_by_loc.partition_number = ?
+          and field_visit_header_info.json_data_id = ?
+          and field_visit_header_info.partition_number = ?
           and lower(field_visit_readings_by_loc.publish) = 'true'
 
         returning location_identifier
