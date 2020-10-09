@@ -13,6 +13,7 @@ with upd as (
                                        parameter,
                                        parm_cd,
                                        monitoring_method,
+                                       nwis_method_code,
                                        field_visit_value,
                                        unit,
                                        uncertainty,
@@ -44,6 +45,7 @@ with upd as (
              , aq_to_nwis_parm.parameter
              , aq_to_nwis_parm.parm_cd
              , field_visit_readings_by_loc.monitoring_method
+             , aq_to_nwis_method_code.nwis_method_code
              , datum_converted_values.display_value field_visit_value
              , field_visit_readings_by_loc.unit
              , field_visit_readings_by_loc.quantitative_uncertainty uncertainty
@@ -71,6 +73,8 @@ with upd as (
                  join data_type_mapping
                       on aq_to_nwis_parm.parm_cd = data_type_mapping.parm_cd
                           and data_type_mapping.data_type = 'discreteGroundWaterTransform'
+                 join aq_to_nwis_method_code
+                      on field_visit_readings_by_loc.monitoring_method = aq_to_nwis_method_code.aqts_monitoring_method
         where field_visit_readings_by_loc.json_data_id = ?
           and field_visit_readings_by_loc.partition_number = ?
           and datum_converted_values.partition_number = ?
@@ -97,6 +101,7 @@ with upd as (
              , aq_to_nwis_parm.parameter
              , aq_to_nwis_parm.parm_cd
              , field_visit_readings_by_loc.monitoring_method
+             , aq_to_nwis_method_code.nwis_method_code
              , field_visit_readings_by_loc.display_value field_visit_value
              , field_visit_readings_by_loc.unit
              , field_visit_readings_by_loc.quantitative_uncertainty uncertainty
@@ -120,6 +125,8 @@ with upd as (
                  join data_type_mapping
                       on aq_to_nwis_parm.parm_cd = data_type_mapping.parm_cd
                           and data_type_mapping.data_type = 'discreteGroundWaterTransform'
+                 join aq_to_nwis_method_code
+                      on field_visit_readings_by_loc.monitoring_method = aq_to_nwis_method_code.aqts_monitoring_method
         where field_visit_readings_by_loc.json_data_id = ?
           and field_visit_readings_by_loc.partition_number = ?
           and field_visit_header_info.json_data_id = ?
