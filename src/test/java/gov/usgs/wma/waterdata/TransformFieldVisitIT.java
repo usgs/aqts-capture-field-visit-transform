@@ -55,6 +55,10 @@ public class TransformFieldVisitIT {
 	public static final String MONITORING_LOCATION_IDENTIFIER_1 = "USGS-393215104490001";
 	public static final String MONITORING_LOCATION_IDENTIFIER_2 = "USGS-393215104490002";
 
+	public static final Long JSON_DATA_ID_TWO_VISIT_TIMES = 34046611L;
+	public static final String LOCATION_IDENTIFIER_TWO_VISIT_TIMES = "405215084335400-OH015";
+	public static final String MONITORING_LOCATION_IDENTIFIER_TWO_VISIT_TIMES = "OH015-405215084335400";
+	public static final Integer PARTITION_NUMBER_TWO_VISIT_TIMES = 11;
 
 	@BeforeEach
 	public void beforeEach() {
@@ -75,6 +79,25 @@ public class TransformFieldVisitIT {
 		assertEquals(LOCATION_IDENTIFIER_1, result.getLocationIdentifier());
 		assertEquals(TransformFieldVisitIT.MONITORING_LOCATION_IDENTIFIER_1, result.getMonitoringLocationIdentifier());
 		assertEquals(12, result.getNumberGwLevelsInserted());
+
+		// Processing the same data twice should not throw an exception
+		// the old rows will be replaced, this is a delete + add
+		transformFieldVisit.processFieldVisit(request);
+	}
+
+	@DatabaseSetup("classpath:/testData/")
+	@DatabaseSetup("classpath:/testResult/cleanseOutput/")
+	@ExpectedDatabase(value="classpath:/testResult/twoVisitTimes/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	@Test
+	public void processFieldVisitDataTwoVisitTimesTest() {
+		request.setId(TransformFieldVisitIT.JSON_DATA_ID_TWO_VISIT_TIMES);
+		request.setPartitionNumber(TransformFieldVisitIT.PARTITION_NUMBER_TWO_VISIT_TIMES);
+		ResultObject result = transformFieldVisit.processFieldVisit(request);
+		assertNotNull(result);
+		assertEquals(TransformFieldVisit.SUCCESS, result.getTransformStatus());
+		assertEquals(LOCATION_IDENTIFIER_TWO_VISIT_TIMES, result.getLocationIdentifier());
+		assertEquals(TransformFieldVisitIT.MONITORING_LOCATION_IDENTIFIER_TWO_VISIT_TIMES, result.getMonitoringLocationIdentifier());
+		assertEquals(43, result.getNumberGwLevelsInserted());
 
 		// Processing the same data twice should not throw an exception
 		// the old rows will be replaced, this is a delete + add
