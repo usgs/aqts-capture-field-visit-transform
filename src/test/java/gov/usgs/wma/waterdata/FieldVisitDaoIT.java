@@ -89,6 +89,24 @@ public class FieldVisitDaoIT {
 		}, "should have thrown a duplicate key exception but did not");
 	}
 
+	@DatabaseSetup("classpath:/testData/")
+	@DatabaseSetup("classpath:/testResult/cleanseOutput/")
+	@ExpectedDatabase(value="classpath:/testResult/twoVisitTimes/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
+	@Test
+	public void doInsertDiscreteGroundWaterDataTwoVisitTimesTest() {
+		request.setId((long) 34046611);
+		request.setPartitionNumber(11);
+		ResultObject result = fieldVisitDao.doInsertDiscreteGroundWaterData(request);
+		assertEquals(TransformFieldVisitIT.LOCATION_IDENTIFIER_TWO_VISIT_TIMES, result.getLocationIdentifier());
+		assertEquals(TransformFieldVisitIT.MONITORING_LOCATION_IDENTIFIER_TWO_VISIT_TIMES, result.getMonitoringLocationIdentifier());
+		assertEquals(43, result.getNumberGwLevelsInserted());
+
+		// Inserting the same data twice without deleting it first throws a duplicate key exception on the constraint
+		assertThrows(DuplicateKeyException.class, () -> {
+			fieldVisitDao.doInsertDiscreteGroundWaterData(request);
+		}, "should have thrown a duplicate key exception but did not");
+	}
+
 	@DatabaseSetup("classpath:/testResult/happyPath/")
 	@ExpectedDatabase(value="classpath:/testResult/cleanseOutput/", assertionMode=DatabaseAssertionMode.NON_STRICT_UNORDERED)
 	@Test

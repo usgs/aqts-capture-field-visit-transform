@@ -64,6 +64,7 @@ with upd as (
                  join datum_converted_values
                       on field_visit_readings_by_loc.json_data_id = datum_converted_values.json_data_id
                           and field_visit_readings_by_loc.field_visit_identifier = datum_converted_values.field_visit_identifier
+                          and field_visit_readings_by_loc.field_visit_time = datum_converted_values.field_visit_time
                  join field_visit_header_info
                       on field_visit_header_info.json_data_id = datum_converted_values.json_data_id
                           and field_visit_header_info.field_visit_identifier = datum_converted_values.field_visit_identifier
