@@ -27,8 +27,9 @@ with upd as (
 --                                        is_valid_readings,
                                        reference_point_unique_id,
                                        use_location_datum_as_reference,
---                                        reading_qualifier,
                                        reading_qualifiers,
+                                       approval_level,
+                                       approval_level_description,
 --                                        ground_water_measurement,
                                        datum
         )
@@ -58,6 +59,8 @@ with upd as (
              , field_visit_readings_by_loc.reference_point_unique_id
              , field_visit_readings_by_loc.use_location_datum_as_reference
              , field_visit_readings_by_loc.qualifiers
+             , field_visit_readings_by_loc.approval_level
+             , field_visit_readings_by_loc.approval_level_description
              , aq_to_nwis_parm.datum
 
         from field_visit_readings_by_loc
@@ -115,6 +118,8 @@ with upd as (
              , field_visit_readings_by_loc.reference_point_unique_id
              , field_visit_readings_by_loc.use_location_datum_as_reference
              , field_visit_readings_by_loc.qualifiers
+             , field_visit_readings_by_loc.approval_level
+             , field_visit_readings_by_loc.approval_level_description
              , aq_to_nwis_parm.datum
 
         from field_visit_readings_by_loc
