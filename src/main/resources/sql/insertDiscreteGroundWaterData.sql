@@ -144,14 +144,18 @@ with upd as (
     /*
         identifiers is here so that we always return the monitoring_location_identifier and location_identifier for
         downstream orphan handling/delete capabilities.
+
+        Pulling the location identifier from the json_data table's parameters column guarantees that even when an empty
+        dataset from AQTS comes through the etl, we can still pass the location identifier and monitoring location
+        identifier to the aqts-capture-discrete-loader lambda, which handles empty/orphan datasets in the observations
+        database.
     */
     select
-        location_identifier,
-        coalesce(nullif((regexp_match(location_identifier, '(\d*)-*(.*)'))[2], ''), 'USGS') || '-' || (regexp_match(location_identifier, '(\d*)-*(.*)'))[1] monitoring_location_identifier
-    from field_visit_readings_by_loc
-    where field_visit_readings_by_loc.json_data_id = ?
-      and field_visit_readings_by_loc.partition_number = ?
-        fetch first 1 rows only
+        jsonb_extract_path_text(parameters, 'locationIdentifier') location_identifier,
+        coalesce(nullif((regexp_match(jsonb_extract_path_text(parameters, 'locationIdentifier'), '(\d*)-*(.*)'))[2], ''), 'USGS') || '-' || (regexp_match(jsonb_extract_path_text(parameters, 'locationIdentifier'), '(\d*)-*(.*)'))[1] monitoring_location_identifier
+    from json_data
+    where json_data.json_data_id = ?
+      and json_data.partition_number = ?
 ) select
         (select location_identifier from identifiers),
         (select monitoring_location_identifier from identifiers),
