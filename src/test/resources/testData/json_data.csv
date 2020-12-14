@@ -1,0 +1,5 @@
+"json_data_id","start_time","response_time","response_code","url","api","script_name","script_pid","parameters","json_content","partition_number","uuid"
+1,"2020-07-31 13:53:01.42","2020-07-31 13:53:01.5",200,someUrl,API,someScriptName,2239,"{\"locationIdentifier\": \"393215104490001\"}","{\"some\": \"json\"}",7,null
+3,"2020-07-31 13:53:01.42","2020-07-31 13:53:01.5",200,someUrl,API,someScriptName,2239,"{\"locationIdentifier\": \"123456789\"}","{\"some\": \"json\"}",7,null
+4,"2020-07-31 13:53:01.42","2020-07-31 13:53:01.5",200,someUrl,API,someScriptName,2239,"{\"locationIdentifier\": \"393215104490002\"}","{\"some\": \"json\"}",7,null
+34046611,"2020-07-31 13:53:01.42","2020-07-31 13:53:01.5",200,someUrl,API,someScriptName,2239,"{\"locationIdentifier\": \"405215084335400-OH015\"}","{\"some\": \"json\"}",11,null
