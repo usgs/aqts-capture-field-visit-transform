@@ -47,6 +47,7 @@ functions:
         - arn:aws:iam::${accountId}:role/csr-Lambda-Role
         - accountId:
             Ref: AWS::AccountId
+    reservedConcurrency: 50
     environment:
       FUNCTION_NAME: transform
       AQTS_DATABASE_ADDRESS: ${self:custom.db.connectInfo.DATABASE_ADDRESS}
