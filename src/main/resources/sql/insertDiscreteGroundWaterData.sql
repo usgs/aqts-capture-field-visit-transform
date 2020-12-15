@@ -86,6 +86,7 @@ with upd as (
           and field_visit_header_info.partition_number = ?
           and lower(field_visit_readings_by_loc.publish) = 'true'
           and aq_to_nwis_parm.parm_cd not in ('62600', '62601')
+          and lower(field_visit_readings_by_loc.reading_type) = 'referenceprimary'
 
         /*
             Union is grabbing the non-duplicate values for these two unique datasets so that we can have both the
@@ -138,6 +139,7 @@ with upd as (
           and field_visit_header_info.json_data_id = ?
           and field_visit_header_info.partition_number = ?
           and lower(field_visit_readings_by_loc.publish) = 'true'
+          and lower(field_visit_readings_by_loc.reading_type) = 'referenceprimary'
 
         returning location_identifier
 ), identifiers as (
