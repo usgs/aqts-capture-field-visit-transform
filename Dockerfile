@@ -1,4 +1,4 @@
-FROM usgswma/python:3.8
+FROM public.ecr.aws/bitnami/python:3.8
 
 RUN apt-get install --no-install-recommends -y curl git dnsutils unzip
 
