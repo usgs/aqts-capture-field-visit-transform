@@ -1,4 +1,4 @@
-@Library(value='iow-ecs-pipeline@2.2.0', changelog=false) _
+@Library(value='iow-ecs-pipeline@3.0.0', changelog=false) _
 
 pipeline {
   agent {
@@ -41,9 +41,7 @@ pipeline {
                 }
         sh '''
           curl ${SHADED_JAR_ARTIFACT_URL} -Lo aqts-capture-field-visit-transform-aws.jar
-          ls -al
           npm install
-          ls -al
           ./node_modules/serverless/bin/serverless.js deploy --stage ${DEPLOY_STAGE} --bucket ${BUCKET} --taggingVersion ${SHADED_JAR_VERSION}
           '''
       }
